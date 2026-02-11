@@ -1,12 +1,12 @@
-import React from "react";
+import { type FC } from "react";
 import "./Header.css";
-import { HiBackward } from "react-icons/hi2";
+import { HiArrowRightOnRectangle } from "react-icons/hi2";
 
 interface HeaderProps {
   onLogout?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onLogout }) => {
+const Header: FC<HeaderProps> = ({ onLogout }) => {
   const handleLogout = () => {
     if (onLogout) {
       onLogout();
@@ -18,10 +18,10 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
     <header className="header">
       <div className="header-content">
         <div className="header-logo">
-          <img src="/logo.png" alt="JS Gym Logo" className="logo-image" />
+          <img src="assets/logo.png" alt="JS Gym Logo" className="logo-image" />
         </div>
         <button className="logout-btn" onClick={handleLogout} title="Logout">
-          <HiBackward size={24} />
+          <HiArrowRightOnRectangle size={24} />
         </button>
       </div>
     </header>

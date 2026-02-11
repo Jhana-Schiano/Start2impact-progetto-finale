@@ -1,5 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
+import Clienti from "./areas/Clienti/Index";
+import Profilo from "./areas/Profilo/Index";
+import Palestra from "./areas/Palestra/Index";
 
 const router = createBrowserRouter([
   {
@@ -9,15 +12,15 @@ const router = createBrowserRouter([
       {
         index: true,
         path: "clienti",
-        element: <h1>Clienti</h1>,
+        element: <Clienti />,
       },
       {
         path: "profilo",
-        element: <h1>Profilo</h1>,
+        element: <Profilo />,
       },
       {
         path: "palestra",
-        element: <h1>Palestra</h1>,
+        element: <Palestra />,
       }
     ]
   },
