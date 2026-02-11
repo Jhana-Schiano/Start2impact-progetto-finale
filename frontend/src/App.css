@@ -1,0 +1,80 @@
+.app {
+	display: contents;
+}
+
+.app-header {
+	padding: 28px 0 8px;
+}
+
+.app-title {
+	font-size: clamp(2rem, 2.4vw + 1rem, 3rem);
+	letter-spacing: -0.01em;
+	margin: 0 0 8px;
+}
+
+.app-subtitle {
+	margin: 0;
+	font-size: 1.05rem;
+}
+
+.app-main {
+	flex: 1;
+	display: grid;
+	gap: 20px;
+}
+
+.panel {
+	background: #ffffff;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-lg);
+	padding: 24px;
+	box-shadow: var(--shadow);
+}
+
+.section-title {
+	font-size: 1.2rem;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	margin: 0 0 12px;
+}
+
+.cta-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 10px 18px;
+	border-radius: 999px;
+	border: 1px solid transparent;
+	background: linear-gradient(135deg, var(--accent), #1f66a8);
+	color: #fff;
+	font-weight: 600;
+	transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 12px 24px rgba(42, 126, 203, 0.25);
+}
+
+.btn--ghost {
+	background: transparent;
+	color: var(--ink-0);
+	border-color: var(--border);
+}
+
+.chip {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 12px;
+	border-radius: 999px;
+	border: 1px solid var(--border);
+	background: #f1f7ff;
+	font-size: 0.9rem;
+}
