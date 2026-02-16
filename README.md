@@ -5,7 +5,7 @@ BACKEND APPUNTI
 dominio 
 cliente (nome, cognome, codice fiscale, telefono, email, altezza, peso, sesso, data nascita, note aggiuntive, ... )
 utente/pt (nome, cognome, email, telefono, data di nascita, indirizzo, )
-scheda 
+scheda (inizio, fine, obiettivo)
 allenamento (aree allenate, durata, giorno)
 esercizio (volume in kg, nome, attrezzo e la posizione rispetto all'allenamento)
 serie (rip, ced, riposo in sec)
@@ -17,9 +17,9 @@ aggiungi serie
 aggiungi es 
 modifica es, serie o allenamento 
 crea e modifica cliente
-modifca il proprio profilo utente 
+modifica il proprio profilo utente 
 login / logout 
-registrazione pt
+registrazione utente
 
 
 requisiti "tecnici"
@@ -31,6 +31,8 @@ requisiti "tecnici"
         - errori vari
 
 palestra : JS Gym 
+
+--> SEEDING: controlla come inserire dei dati di "test" nel db -->
 
 
 

@@ -29,7 +29,7 @@ const Utente = sequelize.define(
       type: DataTypes.STRING(20),
       allowNull: true,
     },
-    data_nascita: {
+    dataNascita: {
       type: DataTypes.DATE,
       allowNull: true,
     },
