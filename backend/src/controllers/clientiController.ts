@@ -80,7 +80,7 @@ export const createCliente = async (req: Request, res: Response) => {
     // Risposta con ID utente creato
     return res.status(201).json({
       message: "Utente creato con successo",
-      id: nuovoUtente.id,
+      id: nuovoUtente.getDataValue("id"),
     });
   } catch (error: any) {
     if (error.name === "SequelizeUniqueConstraintError")
