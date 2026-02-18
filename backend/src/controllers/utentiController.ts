@@ -2,6 +2,31 @@ import type { Request, Response } from "express";
 import Utente from "../models/UtenteModel.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
 
+export const getUtenteById = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({
+        error: "Id utente non valido",
+      });
+    }
+
+    const utente = await Utente.findByPk(id);
+
+    if (!utente) {
+      return res.status(404).json({
+        error: "Utente non trovato",
+      });
+    }
+
+    return res.status(200).json(utente);
+  } catch (error) {
+    console.error("Errore recupero utente:", error);
+    return res.status(500).json({ error: "Errore interno del server" });
+  }
+};
+
 export const createUtente = async (req: Request, res: Response) => {
   try {
     const { nome, cognome, email, telefono, data_nascita, sesso } = req.body;

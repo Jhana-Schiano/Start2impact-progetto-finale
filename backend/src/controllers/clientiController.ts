@@ -2,6 +2,31 @@ import type { Request, Response } from "express";
 import Cliente from "../models/ClienteModels.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
 
+export const getClienteById = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({
+        error: "Id cliente non valido",
+      });
+    }
+
+    const cliente = await Cliente.findByPk(id);
+
+    if (!cliente) {
+      return res.status(404).json({
+        error: "Cliente non trovato",
+      });
+    }
+
+    return res.status(200).json(cliente);
+  } catch (error) {
+    console.error("Errore recupero cliente:", error);
+    return res.status(500).json({ error: "Errore interno del server" });
+  }
+};
+
 export const createCliente = async (req: Request, res: Response) => {
   try {
     const {
@@ -35,7 +60,7 @@ export const createCliente = async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({
         error:
-          "Nome, cognome, email, dataNascita, sesso, altezza e peso sono obbligatori",
+          "nome, cognome, email, dataNascita, sesso, altezza e peso sono obbligatori",
       });
     }
 
@@ -58,7 +83,7 @@ export const createCliente = async (req: Request, res: Response) => {
     }
 
     // Creazione utente nel database
-    const nuovoUtente = await Cliente.create({
+    const nuovoCliente = await Cliente.create({
       nome,
       cognome,
       email,
@@ -77,10 +102,10 @@ export const createCliente = async (req: Request, res: Response) => {
       note,
     });
 
-    // Risposta con ID utente creato
+    // Risposta con ID cliente creato
     return res.status(201).json({
-      message: "Utente creato con successo",
-      id: nuovoUtente.getDataValue("id"),
+      message: "Cliente creato con successo",
+      id: nuovoCliente.getDataValue("id"),
     });
   } catch (error: any) {
     if (error.name === "SequelizeUniqueConstraintError")
@@ -93,7 +118,7 @@ export const createCliente = async (req: Request, res: Response) => {
       });
     }
 
-    console.error("Errore creazione utente:", error);
+    console.error("Errore creazione cliente:", error);
     return res.status(500).json({ error: "Errore interno del server" });
   }
 };
