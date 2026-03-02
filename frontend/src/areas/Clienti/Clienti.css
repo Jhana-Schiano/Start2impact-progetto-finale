@@ -1,0 +1,40 @@
+.clienti-section {
+	gap: 18px;
+}
+
+.clienti-table-wrapper {
+	overflow-x: auto;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	background: var(--bg-1);
+}
+
+.clienti-table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 680px;
+}
+
+.clienti-table th,
+.clienti-table td {
+	padding: 12px 14px;
+	text-align: left;
+	border-bottom: 1px solid var(--border);
+}
+
+.clienti-table th {
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	color: var(--ink-1);
+	background: #f6f9fc;
+}
+
+.clienti-table tbody tr:hover {
+	background: #f7fbff;
+}
+
+.clienti-table tbody tr:last-child td {
+	border-bottom: 0;
+}

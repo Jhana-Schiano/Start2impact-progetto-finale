@@ -1,28 +1,33 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import Clienti from "./areas/Clienti/Index";
-import Profilo from "./areas/Profilo/Index";
-import Palestra from "./areas/Palestra/Index";
+import { createBrowserRouter, Outlet } from "react-router-dom";
+import { ClientiPage, PalestraPage, ProfiloPage } from "./areas/Index";
+import { MainLayout } from "./components/Index";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <MainLayout>
+        <Outlet />
+      </MainLayout>
+    ),
     children: [
       {
         index: true,
+        element: <ClientiPage />,
+      },
+      {
         path: "clienti",
-        element: <Clienti />,
+        element: <ClientiPage />,
       },
       {
         path: "profilo",
-        element: <Profilo />,
+        element: <ProfiloPage />,
       },
       {
         path: "palestra",
-        element: <Palestra />,
-      }
-    ]
+        element: <PalestraPage />,
+      },
+    ],
   },
   {
     path: "*",

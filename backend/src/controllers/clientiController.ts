@@ -2,6 +2,19 @@ import type { Request, Response } from "express";
 import Cliente from "../models/ClienteModels.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
 
+export const getAllClienti = async (_req: Request, res: Response) => {
+  try {
+    const clienti = await Cliente.findAll({
+      order: [["id", "ASC"]],
+    });
+
+    return res.status(200).json(clienti);
+  } catch (error) {
+    console.error("Errore recupero clienti:", error);
+    return res.status(500).json({ error: "Errore interno del server" });
+  }
+};
+
 export const getClienteById = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);

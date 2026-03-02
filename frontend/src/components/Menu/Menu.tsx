@@ -8,13 +8,13 @@ import {
   HiOutlineUserCircle,
   HiOutlineUsers,
 } from "react-icons/hi2";
-import "./Layout.css";
+import "./Menu.css";
 
-const Layout: FC<PropsWithChildren> = ({ children }) => {
+const Menu: FC<PropsWithChildren> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="layout">
+    <div className="menu">
       <aside className={`sidebar ${collapsed ? "sidebar-collapsed" : ""}`}>
         <button
           className="sidebar-toggle"
@@ -73,11 +73,9 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
         </nav>
       </aside>
 
-      <main className="layout-content">
-        {children}
-      </main>
+      <main className="menu-content">{children}</main>
     </div>
   );
 };
 
-export default Layout;
+export default Menu;

@@ -1,4 +1,4 @@
-.layout {
+.menu {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	background: transparent;
@@ -112,12 +112,12 @@
 	justify-content: center;
 }
 
-.layout-content {
+.menu-content {
 	padding: 28px;
 }
 
 @media (max-width: 860px) {
-	.layout {
+	.menu {
 		grid-template-columns: 72px 1fr;
 	}
 }
