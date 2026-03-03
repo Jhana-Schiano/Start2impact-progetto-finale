@@ -4,10 +4,12 @@ import type { FC, PropsWithChildren } from "react";
 
 const MainLayout: FC<PropsWithChildren> = (props) => {
   return (
-    <>
+    <div className="layout-shell">
       <Header />
-      <Menu>{props.children}</Menu>
-    </>
+      <div className="layout-content">
+        <Menu>{props.children}</Menu>
+      </div>
+    </div>
   );
 };
 

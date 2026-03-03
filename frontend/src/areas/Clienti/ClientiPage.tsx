@@ -1,41 +1,69 @@
 import { useEffect, useState, type FC } from "react";
-import { getAllClienti, type Cliente } from "../../api/clienti";
+import {
+  createCliente,
+  getAllClienti,
+  type Cliente,
+  type CreateClienteInput,
+} from "../../api/clienti";
+import CreateClienteModal from "./CreateClienteModal";
 import "./Clienti.css";
 
 const ClientiPage: FC = () => {
   const [clienti, setClienti] = useState<Cliente[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const loadClienti = async () => {
+    try {
+      const response = await getAllClienti();
+      setClienti(response);
+      setError(null);
+    } catch (err) {
+      //TODO: Mostrare il messaggio di errore, ma anche una icona o qualcosa di più visibile e centrato(component ad hoc)
+      setError(err instanceof Error ? err.message : "Errore imprevisto");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadClienti = async () => {
-      try {
-        const response = await getAllClienti();
-        setClienti(response);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Errore imprevisto");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadClienti();
   }, []);
 
+  const handleCreateCliente = async (payload: CreateClienteInput) => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError(null);
+      await createCliente(payload);
+      setIsModalOpen(false);
+      setIsLoading(true);
+      await loadClienti();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Errore imprevisto");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <section className="panel stack clienti-section reveal">
-      <header>
+    <section className="panel clienti-section reveal">
+      <header className="clienti-header">
         <h1 className="section-title">Clienti</h1>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Nuovo cliente
+        </button>
       </header>
 
       {isLoading && <p className="muted">Caricamento clienti...</p>}
-      {error && <p className="muted">{error}</p>}
 
-      <div
-        className="clienti-table-wrapper"
-        role="region"
-        aria-label="Tabella clienti"
-      >
+      <div className="clienti-table-wrapper" aria-label="Tabella clienti">
         <table className="clienti-table">
           <thead>
             <tr>
@@ -69,6 +97,21 @@ const ClientiPage: FC = () => {
           </tbody>
         </table>
       </div>
+      {error && <p className="muted">{error}</p>}
+      {isModalOpen && (
+        <CreateClienteModal
+          isOpen={isModalOpen}
+          isSubmitting={isSubmitting}
+          submitError={submitError}
+          onClose={() => {
+            if (!isSubmitting) {
+              setSubmitError(null);
+              setIsModalOpen(false);
+            }
+          }}
+          onSubmit={handleCreateCliente}
+        />
+      )}
     </section>
   );
 };

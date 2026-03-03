@@ -6,7 +6,26 @@ export type Cliente = {
   sesso: "M" | "F" | "Altro";
 };
 
-type ClienteApiResponse = {
+export type CreateClienteInput = {
+  nome: string;
+  cognome: string;
+  email: string;
+  telefono?: string;
+  indirizzo?: string;
+  citta?: string;
+  lavoro?: string;
+  terapie?: string;
+  condizioniMediche?: string;
+  note?: string;
+  dataNascita: string;
+  sesso: "M" | "F" | "Altro";
+  altezza: number;
+  peso: number;
+  massaMagra?: number;
+  massaGrassa?: number;
+};
+
+type GetAllClientiResponse = {
   id: number;
   nome: string;
   cognome: string;
@@ -21,7 +40,7 @@ export const getAllClienti = async (): Promise<Cliente[]> => {
     throw new Error("Errore nel recupero clienti");
   }
 
-  const data = (await response.json()) as ClienteApiResponse[];
+  const data = (await response.json()) as GetAllClientiResponse[];
 
   return data.map((cliente) => ({
     id: cliente.id,
@@ -30,4 +49,24 @@ export const getAllClienti = async (): Promise<Cliente[]> => {
     dataNascita: cliente.data_nascita,
     sesso: cliente.sesso,
   }));
+};
+
+export const createCliente = async (
+  payload: CreateClienteInput,
+): Promise<void> => {
+  const response = await fetch("/api/clienti", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+
+    throw new Error(errorData?.error ?? "Errore nella creazione cliente");
+  }
 };

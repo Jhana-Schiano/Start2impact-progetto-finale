@@ -67,11 +67,6 @@ select {
 	margin: 0 auto;
 }
 
-.stack {
-	display: grid;
-	gap: 16px;
-}
-
 .muted {
 	color: var(--ink-1);
 }

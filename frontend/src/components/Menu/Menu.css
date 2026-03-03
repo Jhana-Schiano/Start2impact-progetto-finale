@@ -2,7 +2,8 @@
 	display: grid;
 	grid-template-columns: auto 1fr;
 	background: transparent;
-	height: 100%;
+	flex: 1;
+	min-height: 0;
 }
 
 .sidebar {

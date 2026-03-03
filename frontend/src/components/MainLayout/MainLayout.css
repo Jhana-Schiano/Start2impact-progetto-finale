@@ -2,6 +2,18 @@
 	display: contents;
 }
 
+.layout-shell {
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+}
+
+.layout-content {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+}
+
 .app-header {
 	padding: 28px 0 8px;
 }

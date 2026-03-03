@@ -1,5 +1,15 @@
 .clienti-section {
 	gap: 18px;
+	height: 100%;
+}
+
+.clienti-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px;
+
 }
 
 .clienti-table-wrapper {
@@ -37,4 +47,11 @@
 
 .clienti-table tbody tr:last-child td {
 	border-bottom: 0;
+}
+
+@media (max-width: 700px) {
+	.clienti-header {
+		align-items: flex-start;
+		flex-direction: column;
+	}
 }
