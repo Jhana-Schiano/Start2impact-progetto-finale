@@ -4,6 +4,10 @@ import { fileURLToPath } from "node:url";
 import sequelize, { ensureDatabaseExists } from "./config/database.js";
 import utentiRoutes from "./routes/utentiRoutes.js";
 import clienteRoutes from "./routes/clienteRoutes.js";
+import schedeRoutes from "./routes/schedeRoutes.js";
+import allenamentiRoutes from "./routes/allenamentiRoutes.js";
+import eserciziRoutes from "./routes/eserciziRoutes.js";
+import serieRoutes from "./routes/serieRoutes.js";
 
 const app = express();
 
@@ -16,6 +20,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use("/api/utenti", utentiRoutes);
 app.use("/api/clienti", clienteRoutes);
+app.use("/api/schede", schedeRoutes);
+app.use("/api/allenamenti", allenamentiRoutes);
+app.use("/api/esercizi", eserciziRoutes);
+app.use("/api/serie", serieRoutes);
 
 const port = Number(process.env.PORT ?? 5000);
 
