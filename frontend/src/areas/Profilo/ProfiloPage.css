@@ -1,0 +1,130 @@
+.profilo-section {
+  gap: 18px;
+  height: 100%;
+}
+
+.profilo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.profilo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.profilo-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-1);
+  padding: 12px 14px;
+}
+
+.profilo-label {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink-1);
+}
+
+.profilo-value {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink-0);
+  word-break: break-word;
+}
+
+.profilo-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.profilo-edit-btn {
+  min-width: 120px;
+}
+
+.profilo-logout-btn {
+  min-width: 140px;
+}
+
+.profilo-logout-btn:active {
+  transform: scale(0.95);
+}
+
+.profilo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  padding: 20px;
+  background: rgba(17, 32, 42, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1100;
+}
+
+.profilo-modal {
+  width: min(560px, 100%);
+  background: var(--bg-1);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.profilo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.profilo-modal-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.profilo-modal-form {
+  display: grid;
+  gap: 12px;
+}
+
+.profilo-modal-field {
+  display: grid;
+  gap: 6px;
+  color: var(--ink-1);
+}
+
+.profilo-modal-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-1);
+  color: var(--ink-0);
+}
+
+.profilo-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .profilo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .profilo-grid {
+    grid-template-columns: 1fr;
+  }
+}
