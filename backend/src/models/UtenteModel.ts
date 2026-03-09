@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 const Utente = sequelize.define(
@@ -24,6 +24,10 @@ const Utente = sequelize.define(
       validate: {
         isEmail: true,
       },
+    },
+    password_hash: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
     telefono: {
       type: DataTypes.STRING(20),

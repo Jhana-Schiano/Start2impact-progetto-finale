@@ -71,6 +71,10 @@ select {
 	color: var(--ink-1);
 }
 
+.error-text {
+	color: #c33131;
+}
+
 .sr-only {
 	position: absolute;
 	width: 1px;

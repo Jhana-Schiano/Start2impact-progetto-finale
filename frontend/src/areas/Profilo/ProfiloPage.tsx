@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -6,17 +7,21 @@ import {
   type FC,
   type SyntheticEvent,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 import {
   getUtenteById,
   updateUtenteContatti,
   type Utente,
 } from "../../api/utenti";
+import { logout } from "../../store/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import "./ProfiloPage.css";
 
-const PLACEHOLDER_USER_ID = 1;
-
 const ProfiloPage: FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const userId = useAppSelector((state) => state.auth.userId);
   const [utente, setUtente] = useState<Utente | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,10 +31,17 @@ const ProfiloPage: FC = () => {
   const [isSavingContacts, setIsSavingContacts] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
 
-  const loadProfilo = async () => {
+  const loadProfilo = useCallback(async () => {
+    if (!userId) {
+      setUtente(null);
+      setError("Effettua il login per visualizzare il profilo");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const data = await getUtenteById(PLACEHOLDER_USER_ID);
+      const data = await getUtenteById(userId);
       setUtente(data);
       setError(null);
     } catch (err) {
@@ -37,11 +49,11 @@ const ProfiloPage: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     loadProfilo();
-  }, []);
+  }, [loadProfilo]);
 
   const fields = useMemo(() => {
     if (!utente) {
@@ -119,10 +131,15 @@ const ProfiloPage: FC = () => {
     }
 
     try {
+      if (!userId) {
+        setEditError("Sessione non valida, effettua di nuovo il login");
+        return;
+      }
+
       setIsSavingContacts(true);
       setEditError(null);
 
-      await updateUtenteContatti(PLACEHOLDER_USER_ID, {
+      await updateUtenteContatti(userId, {
         email: trimmedEmail || undefined,
         telefono: trimmedTelefono || undefined,
       });
@@ -134,6 +151,11 @@ const ProfiloPage: FC = () => {
     } finally {
       setIsSavingContacts(false);
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -172,6 +194,7 @@ const ProfiloPage: FC = () => {
           className="btn profilo-logout-btn"
           title="Logout"
           aria-label="Logout"
+          onClick={handleLogout}
         >
           <HiArrowRightOnRectangle size={24} />
           Logout

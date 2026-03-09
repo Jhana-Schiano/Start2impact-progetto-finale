@@ -8,10 +8,7 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ onLogout }) => {
   const handleLogout = () => {
-    if (onLogout) {
-      onLogout();
-    }
-    console.log("Logout clicked");
+    onLogout?.();
   };
 
   return (

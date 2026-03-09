@@ -1,6 +1,53 @@
 import type { Request, Response } from "express";
+import { compare, hash } from "bcryptjs";
 import Utente from "../models/UtenteModel.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
+
+export const loginUtente = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Email e password sono obbligatorie",
+      });
+    }
+
+    if (!isEmailValid(email)) {
+      return res.status(400).json({
+        error: "Formato email non valido",
+      });
+    }
+
+    const utente = await Utente.findOne({
+      where: { email },
+      attributes: ["id", "password_hash"],
+    });
+
+    if (!utente) {
+      return res.status(401).json({
+        error: "Credenziali non valide",
+      });
+    }
+
+    const passwordHash = utente.getDataValue("password_hash") as string;
+    const isPasswordValid = await compare(password, passwordHash);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        error: "Credenziali non valide",
+      });
+    }
+
+    return res.status(200).json({
+      id: utente.getDataValue("id"),
+      message: "Login effettuato con successo",
+    });
+  } catch (error) {
+    console.error("Errore login utente:", error);
+    return res.status(500).json({ error: "Errore interno del server" });
+  }
+};
 
 export const getUtenteById = async (req: Request, res: Response) => {
   try {
@@ -12,7 +59,9 @@ export const getUtenteById = async (req: Request, res: Response) => {
       });
     }
 
-    const utente = await Utente.findByPk(id);
+    const utente = await Utente.findByPk(id, {
+      attributes: { exclude: ["password_hash"] },
+    });
 
     if (!utente) {
       return res.status(404).json({
@@ -29,12 +78,13 @@ export const getUtenteById = async (req: Request, res: Response) => {
 
 export const createUtente = async (req: Request, res: Response) => {
   try {
-    const { nome, cognome, email, telefono, data_nascita, sesso } = req.body;
+    const { nome, cognome, email, password, telefono, data_nascita, sesso } =
+      req.body;
 
     // Validazione dati obbligatori
-    if (!nome || !cognome || !email) {
+    if (!nome || !cognome || !email || !password) {
       return res.status(400).json({
-        error: "Nome, cognome ed email sono obbligatori",
+        error: "Nome, cognome, email e password sono obbligatori",
       });
     }
 
@@ -57,11 +107,20 @@ export const createUtente = async (req: Request, res: Response) => {
       });
     }
 
+    if (typeof password !== "string" || password.length < 6) {
+      return res.status(400).json({
+        error: "La password deve contenere almeno 6 caratteri",
+      });
+    }
+
+    const passwordHash = await hash(password, 10);
+
     // Creazione utente nel database
     const nuovoUtente = await Utente.create({
       nome,
       cognome,
       email,
+      password_hash: passwordHash,
       telefono,
       data_nascita,
       sesso,

@@ -15,6 +15,30 @@ export type UpdateUtenteContattiInput = {
   telefono?: string;
 };
 
+export type LoginUtenteInput = {
+  email: string;
+  password: string;
+};
+
+export type LoginUtenteResponse = {
+  id: number;
+};
+
+export type CreateUtenteInput = {
+  nome: string;
+  cognome: string;
+  email: string;
+  password: string;
+  telefono?: string;
+  data_nascita?: string;
+  sesso?: "M" | "F" | "Altro";
+};
+
+export type CreateUtenteResponse = {
+  id: number;
+  message: string;
+};
+
 type UtenteApiResponse = {
   id: number;
   nome: string;
@@ -25,6 +49,59 @@ type UtenteApiResponse = {
   sesso?: "M" | "F" | "Altro" | null;
   createdAt?: string;
   updatedAt?: string;
+};
+
+export const loginUtente = async (
+  payload: LoginUtenteInput,
+): Promise<LoginUtenteResponse> => {
+  const response = await fetch("/api/utenti/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+
+    throw new Error(errorData?.error ?? "Credenziali non valide");
+  }
+
+  const data = (await response.json()) as LoginUtenteResponse;
+
+  return {
+    id: data.id,
+  };
+};
+
+export const createUtente = async (
+  payload: CreateUtenteInput,
+): Promise<CreateUtenteResponse> => {
+  const response = await fetch("/api/utenti", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+
+    throw new Error(errorData?.error ?? "Errore durante la registrazione");
+  }
+
+  const data = (await response.json()) as CreateUtenteResponse;
+
+  return {
+    id: data.id,
+    message: data.message,
+  };
 };
 
 export const getUtenteById = async (id: number): Promise<Utente> => {

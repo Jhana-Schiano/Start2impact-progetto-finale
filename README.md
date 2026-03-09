@@ -48,3 +48,19 @@ header e layout dovrebbero avere lo stesso colore/profondità? (header sembra tr
 useParams (di react router) per prendere i parametri dalla route, useSearchParams per i query params
 usenavigate per navigare tra le pagine. nel menu usi il link, ma se hai delle azioni (tipo bottoni) usi il navigate 
 puoi anche passare lo state, ma è uno stato non persistito (se ricarichi perdi tutto quindi non si usa tanto) 
+
+
+MODALE 
+ok usare bool open e onclose function passati dall'esterno 
+usi il bool open per mostrare il componente 
+per la tabella usa un operatore ternario sul numero di clienti per mostrare la tabella oppure un component di error
+
+fai degli hook per le chiamate api. fa il fetch get e espone il risultato in una variabile. puoi anche esporre il metodo get così sullo useEffect chiami il metodo dell'hook che popolerà la variabile che poi potrai usare (usa useCallback nella get sennò va in loop)
+altrimenti possiamo fare che l'hook quando viene tirato dentro in un componente fa in automatico la get (sposti lo use effect dentro l'hook al posto del componente).
+spesso si fa useeffect in pagina così hai più controllo 
+gli hook hanno anche lo use state per salvare lo stato
+puoi fare hook anche per le post/put (CONTROLLA SE IL MODIFICA è UNA PUT)
+
+pagina clienti paginata 
+tabella attrezzi anche no -> fai un seeding automatico 
+cerca un modo per sbiancare i dati del db (magari da scrivere nel readme)
