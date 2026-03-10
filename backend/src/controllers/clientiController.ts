@@ -61,6 +61,13 @@ export const createCliente = async (req: Request, res: Response) => {
       note,
     } = req.body;
 
+    const terapieText =
+      typeof terapie === "string" ? terapie.trim() : undefined;
+    const condizioniMedicheText =
+      typeof condizioniMediche === "string"
+        ? condizioniMediche.trim()
+        : undefined;
+
     // Validazione dati obbligatori
     if (
       !nome ||
@@ -69,11 +76,37 @@ export const createCliente = async (req: Request, res: Response) => {
       !dataNascita ||
       !sesso ||
       altezza == null ||
-      peso == null
+      peso == null ||
+      massaGrassa == null ||
+      massaMagra == null
     ) {
       return res.status(400).json({
         error:
-          "nome, cognome, email, dataNascita, sesso, altezza e peso sono obbligatori",
+          "nome, cognome, email, dataNascita, sesso, altezza, peso, massaGrassa e massaMagra sono obbligatori",
+      });
+    }
+
+    if (
+      !Number.isFinite(Number(altezza)) ||
+      !Number.isFinite(Number(peso)) ||
+      !Number.isFinite(Number(massaGrassa)) ||
+      !Number.isFinite(Number(massaMagra))
+    ) {
+      return res.status(400).json({
+        error:
+          "altezza, peso, massaGrassa e massaMagra devono essere valori numerici validi",
+      });
+    }
+
+    if (
+      Number(altezza) <= 0 ||
+      Number(peso) <= 0 ||
+      Number(massaGrassa) <= 0 ||
+      Number(massaMagra) <= 0
+    ) {
+      return res.status(400).json({
+        error:
+          "altezza, peso, massaGrassa e massaMagra devono essere maggiori di zero",
       });
     }
 
@@ -110,8 +143,8 @@ export const createCliente = async (req: Request, res: Response) => {
       massaGrassa,
       massaMagra,
       lavoro,
-      terapie,
-      condizioniMediche,
+      terapie: terapieText || null,
+      condizioniMediche: condizioniMedicheText || null,
       note,
     });
 

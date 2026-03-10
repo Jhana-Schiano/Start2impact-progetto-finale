@@ -1,9 +1,17 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
-import { ClientiPage, PalestraPage, ProfiloPage } from "./areas/Index";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import {
+  ClientiPage,
+  DatiClienteTab,
+  DettaglioClientePage,
+  LoginPage,
+  PalestraPage,
+  ProfiloPage,
+  RegisterPage,
+  SchedeClienteTab,
+} from "./areas/Index";
 import { MainLayout } from "./components/Index";
-import LoginPage from "./areas/Auth/LoginPage";
-import RegisterPage from "./areas/Auth/RegisterPage";
 import RequireAuth from "./auth/RequireAuth";
+
 
 const router = createBrowserRouter([
   {
@@ -31,6 +39,24 @@ const router = createBrowserRouter([
       {
         path: "clienti",
         element: <ClientiPage />,
+      },
+      {
+        path: "clienti/:id",
+        element: <DettaglioClientePage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="dati" replace />,
+          },
+          {
+            path: "dati",
+            element: <DatiClienteTab />,
+          },
+          {
+            path: "schede",
+            element: <SchedeClienteTab />,
+          },
+        ],
       },
       {
         path: "profilo",

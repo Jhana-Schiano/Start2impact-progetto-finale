@@ -27,8 +27,8 @@ const initialFormState: CreateClienteInput = {
   dataNascita: "",
   altezza: 0,
   peso: 0,
-  massaMagra: undefined,
-  massaGrassa: undefined,
+  massaMagra: 0,
+  massaGrassa: 0,
   terapie: "",
   condizioniMediche: "",
   note: "",
@@ -78,7 +78,7 @@ const CreateClienteModal: FC<CreateClienteModalProps> = ({
       if (name === "massaMagra" || name === "massaGrassa") {
         return {
           ...previous,
-          [name]: value === "" ? undefined : Number(value),
+          [name]: value === "" ? 0 : Number(value),
         };
       }
 
@@ -264,7 +264,7 @@ const CreateClienteModal: FC<CreateClienteModalProps> = ({
                   name="altezza"
                   type="number"
                   min={1}
-                  step="0.1"
+                  step={1}
                   value={formState.altezza || ""}
                   onChange={handleChange}
                   required
@@ -289,10 +289,11 @@ const CreateClienteModal: FC<CreateClienteModalProps> = ({
                 <input
                   name="massaMagra"
                   type="number"
-                  min={0}
+                  min={0.1}
                   step="0.1"
-                  value={formState.massaMagra ?? ""}
+                  value={formState.massaMagra || ""}
                   onChange={handleChange}
+                  required
                 />
               </label>
 
@@ -301,10 +302,11 @@ const CreateClienteModal: FC<CreateClienteModalProps> = ({
                 <input
                   name="massaGrassa"
                   type="number"
-                  min={0}
+                  min={0.1}
                   step="0.1"
-                  value={formState.massaGrassa ?? ""}
+                  value={formState.massaGrassa || ""}
                   onChange={handleChange}
+                  required
                 />
               </label>
 

@@ -1,4 +1,5 @@
 import { useEffect, useState, type FC } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   createCliente,
   getAllClienti,
@@ -6,7 +7,7 @@ import {
   type CreateClienteInput,
 } from "../../api/clienti";
 import CreateClienteModal from "./CreateClienteModal";
-import "./Clienti.css";
+import "./ClientiPage.css";
 
 const ClientiPage: FC = () => {
   const [clienti, setClienti] = useState<Cliente[]>([]);
@@ -15,6 +16,7 @@ const ClientiPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const loadClienti = async () => {
     try {
@@ -46,6 +48,10 @@ const ClientiPage: FC = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const goToClienteDettaglio = (clienteId: number) => {
+    navigate(`/clienti/${clienteId}`);
   };
 
   return (
@@ -84,7 +90,18 @@ const ClientiPage: FC = () => {
             )}
 
             {clienti.map((cliente) => (
-              <tr key={cliente.id}>
+              <tr
+                key={cliente.id}
+                className="clienti-row-clickable"
+                onClick={() => goToClienteDettaglio(cliente.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    goToClienteDettaglio(cliente.id);
+                  }
+                }}
+                aria-label={`Apri dettaglio cliente ${cliente.nome} ${cliente.cognome}`}
+              >
                 <td>{cliente.id}</td>
                 <td>{cliente.nome}</td>
                 <td>{cliente.cognome}</td>

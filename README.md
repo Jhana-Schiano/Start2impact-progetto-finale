@@ -44,6 +44,7 @@ header e layout dovrebbero avere lo stesso colore/profondità? (header sembra tr
 - fai una pagina bella per il 404
 - fai la loading page
 - volendo la pagina di errore puoi metterla dentro al main layout così se c'è 404 non scompare il menu e l'header
+- aggiungi paginazione nella api e nella tabella clienti
 
 useParams (di react router) per prendere i parametri dalla route, useSearchParams per i query params
 usenavigate per navigare tra le pagine. nel menu usi il link, ma se hai delle azioni (tipo bottoni) usi il navigate 
@@ -59,8 +60,4 @@ fai degli hook per le chiamate api. fa il fetch get e espone il risultato in una
 altrimenti possiamo fare che l'hook quando viene tirato dentro in un componente fa in automatico la get (sposti lo use effect dentro l'hook al posto del componente).
 spesso si fa useeffect in pagina così hai più controllo 
 gli hook hanno anche lo use state per salvare lo stato
-puoi fare hook anche per le post/put (CONTROLLA SE IL MODIFICA è UNA PUT)
-
-pagina clienti paginata 
-tabella attrezzi anche no -> fai un seeding automatico 
-cerca un modo per sbiancare i dati del db (magari da scrivere nel readme)
+puoi fare hook anche per le post/put

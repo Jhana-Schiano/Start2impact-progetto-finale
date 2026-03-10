@@ -46,8 +46,12 @@ const Cliente = sequelize.define(
       allowNull: false,
     },
     altezza: {
-      type: DataTypes.DECIMAL(5, 2),
+      type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        isInt: true,
+        min: 1,
+      },
     },
     peso: {
       type: DataTypes.DECIMAL(5, 2),
@@ -55,11 +59,11 @@ const Cliente = sequelize.define(
     },
     massaGrassa: {
       type: DataTypes.DECIMAL(5, 2),
-      allowNull: true,
+      allowNull: false,
     },
     massaMagra: {
       type: DataTypes.DECIMAL(5, 2),
-      allowNull: true,
+      allowNull: false,
     },
     lavoro: {
       type: DataTypes.TEXT,
