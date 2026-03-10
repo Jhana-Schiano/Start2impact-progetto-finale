@@ -43,6 +43,18 @@
   min-height: 220px;
 }
 
+.detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.detail-save-error {
+  margin: 0 0 10px;
+}
+
 .detail-grid {
   margin: 0;
   display: grid;
@@ -116,6 +128,35 @@
   word-break: break-word;
 }
 
+.detail-input,
+.detail-textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink-0);
+  padding: 8px 10px;
+}
+
+.detail-input {
+  min-height: 38px;
+}
+
+.detail-textarea {
+  resize: vertical;
+  min-height: 86px;
+}
+
+.detail-inline-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.detail-row--textarea {
+  align-items: center;
+}
+
 .schede-list {
   margin: 0;
   padding: 0;
@@ -152,5 +193,9 @@
   .detail-row {
     grid-template-columns: 1fr;
     gap: 2px;
+  }
+
+  .detail-inline-fields {
+    grid-template-columns: 1fr;
   }
 }

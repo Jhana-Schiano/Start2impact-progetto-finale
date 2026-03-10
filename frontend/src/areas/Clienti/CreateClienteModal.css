@@ -5,7 +5,7 @@
 	background: rgba(17, 32, 42, 0.45);
 	display: grid;
 	place-items: center;
-	z-index: 1100;
+	z-index: 3000;
 }
 
 .modal {

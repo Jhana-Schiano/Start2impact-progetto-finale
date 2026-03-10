@@ -45,6 +45,22 @@ export type CreateClienteInput = {
   massaGrassa: number;
 };
 
+export type UpdateClienteInput = {
+  indirizzo?: string;
+  citta?: string;
+  telefono?: string;
+  email?: string;
+  sesso?: "M" | "F" | "Altro";
+  altezza?: number;
+  peso?: number;
+  massaGrassa?: number;
+  massaMagra?: number;
+  lavoro?: string;
+  terapie?: string;
+  condizioniMediche?: string;
+  note?: string;
+};
+
 type GetAllClientiResponse = {
   id: number;
   nome: string;
@@ -140,5 +156,26 @@ export const createCliente = async (
     } | null;
 
     throw new Error(errorData?.error ?? "Errore nella creazione cliente");
+  }
+};
+
+export const updateCliente = async (
+  clienteId: number,
+  payload: UpdateClienteInput,
+): Promise<void> => {
+  const response = await fetch(`/api/clienti/${clienteId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+
+    throw new Error(errorData?.error ?? "Errore nell'aggiornamento cliente");
   }
 };

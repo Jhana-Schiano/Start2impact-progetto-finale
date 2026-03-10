@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from "react";
+import { useCallback, useEffect, useState, type FC } from "react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { getClienteById, type ClienteDettaglio } from "../../api/clienti";
 import "./DettaglioClientePage.css";
@@ -8,6 +8,7 @@ export type DettaglioClienteContext = {
   cliente: ClienteDettaglio | null;
   isLoadingCliente: boolean;
   errorCliente: string | null;
+  reloadCliente: () => Promise<void>;
 };
 
 const DettaglioClientePage: FC = () => {
@@ -17,32 +18,32 @@ const DettaglioClientePage: FC = () => {
   const [isLoadingCliente, setIsLoadingCliente] = useState(true);
   const [errorCliente, setErrorCliente] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadCliente = useCallback(async () => {
     if (!Number.isInteger(clienteId) || clienteId <= 0) {
       setErrorCliente("Id cliente non valido");
       setIsLoadingCliente(false);
       return;
     }
 
-    const loadCliente = async () => {
-      try {
-        setIsLoadingCliente(true);
-        const response = await getClienteById(clienteId);
-        setCliente(response);
-        setErrorCliente(null);
-      } catch (error) {
-        setErrorCliente(
-          error instanceof Error
-            ? error.message
-            : "Errore nel caricamento cliente",
-        );
-      } finally {
-        setIsLoadingCliente(false);
-      }
-    };
-
-    loadCliente();
+    try {
+      setIsLoadingCliente(true);
+      const response = await getClienteById(clienteId);
+      setCliente(response);
+      setErrorCliente(null);
+    } catch (error) {
+      setErrorCliente(
+        error instanceof Error
+          ? error.message
+          : "Errore nel caricamento cliente",
+      );
+    } finally {
+      setIsLoadingCliente(false);
+    }
   }, [clienteId]);
+
+  useEffect(() => {
+    loadCliente();
+  }, [loadCliente]);
 
   const clienteTitolo = isLoadingCliente
     ? "Caricamento cliente..."
@@ -83,6 +84,7 @@ const DettaglioClientePage: FC = () => {
             cliente,
             isLoadingCliente,
             errorCliente,
+            reloadCliente: loadCliente,
           }}
         />
       </div>
