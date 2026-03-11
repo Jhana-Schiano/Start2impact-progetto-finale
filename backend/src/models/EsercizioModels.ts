@@ -15,7 +15,7 @@ const Esercizio = sequelize.define(
     },
     attrezzo: {
       type: DataTypes.STRING(150),
-      allowNull: false,
+      allowNull: true,
     },
     allenamento_id: {
       type: DataTypes.INTEGER,
@@ -26,10 +26,6 @@ const Esercizio = sequelize.define(
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
-    },
-    ordine: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     numero_serie: {
       type: DataTypes.INTEGER,
@@ -45,7 +41,7 @@ const Esercizio = sequelize.define(
     },
     volume: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

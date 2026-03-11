@@ -20,7 +20,6 @@ export const createEsercizio = async (req: Request, res: Response) => {
       nome,
       attrezzo,
       allenamentoId,
-      ordine,
       numeroSerie,
       ripetizioni,
       riposo,
@@ -29,29 +28,40 @@ export const createEsercizio = async (req: Request, res: Response) => {
 
     if (
       !nome ||
-      !attrezzo ||
       allenamentoId == null ||
-      ordine == null ||
       numeroSerie == null ||
       ripetizioni == null ||
-      riposo == null ||
-      volume == null
+      riposo == null
     ) {
       return res.status(400).json({
         error:
-          "nome, attrezzo, allenamentoId, ordine, numeroSerie, ripetizioni, riposo e volume sono obbligatori",
+          "nome, allenamentoId, numeroSerie, ripetizioni e riposo sono obbligatori",
+      });
+    }
+
+    const rawAttrezzo = attrezzo == null ? "" : String(attrezzo).trim();
+    const normalizedAttrezzo = rawAttrezzo === "" ? null : rawAttrezzo;
+
+    const normalizedVolume =
+      volume == null || volume === "" ? null : Number(volume);
+
+    if (
+      normalizedVolume != null &&
+      (!Number.isFinite(normalizedVolume) || normalizedVolume <= 0)
+    ) {
+      return res.status(400).json({
+        error: "volume deve essere maggiore di zero quando valorizzato",
       });
     }
 
     const nuovoEsercizio = await Esercizio.create({
       nome,
-      attrezzo,
+      attrezzo: normalizedAttrezzo,
       allenamento_id: allenamentoId,
-      ordine,
       numero_serie: numeroSerie,
       ripetizioni,
       riposo,
-      volume,
+      volume: normalizedVolume,
     });
 
     return res.status(201).json({

@@ -14,6 +14,27 @@ export const getAllSchede = async (_req: Request, res: Response) => {
   }
 };
 
+export const getSchedaById = async (req: Request, res: Response) => {
+  const schedaId = Number(req.params.id);
+
+  if (!Number.isInteger(schedaId) || schedaId <= 0) {
+    return res.status(400).json({ error: "Id scheda non valido" });
+  }
+
+  try {
+    const scheda = await Scheda.findByPk(schedaId);
+
+    if (!scheda) {
+      return res.status(404).json({ error: "Scheda non trovata" });
+    }
+
+    return res.status(200).json(scheda);
+  } catch (error) {
+    console.error("Errore recupero scheda:", error);
+    return res.status(500).json({ error: "Errore interno del server" });
+  }
+};
+
 export const createScheda = async (req: Request, res: Response) => {
   try {
     const { dataInizio, dataFine, personalTrainerId, obiettivo, clienteId } =
