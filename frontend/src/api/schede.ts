@@ -1,6 +1,13 @@
 export type Scheda = {
   id: number;
-  titolo: string;
+  dataInizio: string;
+  dataFine: string;
+  personalTrainerId: number;
+  obiettivo: string;
+  clienteId: number;
+};
+
+export type CreateSchedaInput = {
   dataInizio: string;
   dataFine: string;
   personalTrainerId: number;
@@ -10,7 +17,6 @@ export type Scheda = {
 
 type GetAllSchedeResponse = {
   id: number;
-  titolo: string;
   data_inizio: string;
   data_fine: string;
   personal_trainer_id: number;
@@ -33,11 +39,30 @@ export const getSchedeByClienteId = async (
     .filter((scheda) => scheda.cliente_id === clienteId)
     .map((scheda) => ({
       id: scheda.id,
-      titolo: scheda.titolo,
       dataInizio: scheda.data_inizio,
       dataFine: scheda.data_fine,
       personalTrainerId: scheda.personal_trainer_id,
       obiettivo: scheda.obiettivo,
       clienteId: scheda.cliente_id,
     }));
+};
+
+export const createScheda = async (
+  payload: CreateSchedaInput,
+): Promise<void> => {
+  const response = await fetch("/api/schede", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+
+    throw new Error(errorData?.error ?? "Errore nella creazione scheda");
+  }
 };

@@ -1,14 +1,66 @@
-import { useEffect, useState, type FC } from "react";
-import { getSchedeByClienteId, type Scheda } from "../../api/schede";
-import { useOutletContext } from "react-router-dom";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ChangeEvent,
+  type FC,
+  type SyntheticEvent,
+} from "react";
+import { createPortal } from "react-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import {
+  createScheda,
+  getSchedeByClienteId,
+  type Scheda,
+} from "../../api/schede";
+import { useAppSelector } from "../../store/hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
+import "../Clienti/CreateClienteModal.css";
+
+type NewSchedaFormState = {
+  dataInizio: string;
+  dataFine: string;
+  obiettivo: string;
+};
+
+const initialSchedaFormState: NewSchedaFormState = {
+  dataInizio: "",
+  dataFine: "",
+  obiettivo: "",
+};
 
 const SchedeClienteTab: FC = () => {
   const { clienteId, errorCliente, isLoadingCliente } =
     useOutletContext<DettaglioClienteContext>();
+  const navigate = useNavigate();
+  const userId = useAppSelector((state) => state.auth.userId);
   const [schede, setSchede] = useState<Scheda[]>([]);
   const [isLoadingSchede, setIsLoadingSchede] = useState(true);
   const [errorSchede, setErrorSchede] = useState<string | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreatingScheda, setIsCreatingScheda] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [newSchedaForm, setNewSchedaForm] = useState<NewSchedaFormState>(
+    initialSchedaFormState,
+  );
+
+  const loadSchede = useCallback(async () => {
+    try {
+      setIsLoadingSchede(true);
+      const response = await getSchedeByClienteId(clienteId);
+      setSchede(response);
+      setErrorSchede(null);
+    } catch (error) {
+      setErrorSchede(
+        error instanceof Error
+          ? error.message
+          : "Errore nel caricamento schede cliente",
+      );
+    } finally {
+      setIsLoadingSchede(false);
+    }
+  }, [clienteId]);
 
   useEffect(() => {
     if (isLoadingCliente || errorCliente) {
@@ -16,25 +68,17 @@ const SchedeClienteTab: FC = () => {
       return;
     }
 
-    const loadSchede = async () => {
-      try {
-        setIsLoadingSchede(true);
-        const response = await getSchedeByClienteId(clienteId);
-        setSchede(response);
-        setErrorSchede(null);
-      } catch (error) {
-        setErrorSchede(
-          error instanceof Error
-            ? error.message
-            : "Errore nel caricamento schede cliente",
-        );
-      } finally {
-        setIsLoadingSchede(false);
-      }
-    };
-
     loadSchede();
-  }, [clienteId, errorCliente, isLoadingCliente]);
+  }, [errorCliente, isLoadingCliente, loadSchede]);
+
+  const sortedSchede = useMemo(
+    () =>
+      [...schede].sort(
+        (a, b) =>
+          new Date(b.dataInizio).getTime() - new Date(a.dataInizio).getTime(),
+      ),
+    [schede],
+  );
 
   if (isLoadingCliente || isLoadingSchede) {
     return <p className="muted">Caricamento schede...</p>;
@@ -50,23 +94,212 @@ const SchedeClienteTab: FC = () => {
     return <p className="error-text">{errorSchede}</p>;
   }
 
-  if (schede.length === 0) {
-    return <p className="muted">Nessuna scheda associata a questo cliente.</p>;
-  }
+  const handleOpenCreateModal = () => {
+    setCreateError(null);
+    setNewSchedaForm(initialSchedaFormState);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleFormChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.target;
+
+    setNewSchedaForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  const handleCreateScheda = async (event: SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      setIsCreatingScheda(true);
+      setCreateError(null);
+
+      if (!userId) {
+        throw new Error("Utente non autenticato. Effettua di nuovo il login.");
+      }
+
+      const { dataInizio, dataFine, obiettivo } = newSchedaForm;
+      const obiettivoText = obiettivo.trim();
+
+      if (!dataInizio || !dataFine || obiettivoText === "") {
+        throw new Error("Data inizio, data fine e obiettivo sono obbligatori");
+      }
+
+      if (new Date(dataFine).getTime() < new Date(dataInizio).getTime()) {
+        throw new Error(
+          "La data fine non puo essere precedente alla data inizio",
+        );
+      }
+
+      await createScheda({
+        dataInizio,
+        dataFine,
+        personalTrainerId: userId,
+        obiettivo: obiettivoText,
+        clienteId,
+      });
+
+      await loadSchede();
+      setIsCreateModalOpen(false);
+      setNewSchedaForm(initialSchedaFormState);
+    } catch (error) {
+      setCreateError(
+        error instanceof Error
+          ? error.message
+          : "Errore durante la creazione della scheda",
+      );
+    } finally {
+      setIsCreatingScheda(false);
+    }
+  };
 
   return (
-    <ul className="schede-list">
-      {schede.map((scheda) => (
-        <li key={scheda.id} className="schede-item">
-          <h3>{scheda.titolo}</h3>
-          <p className="muted">
-            {new Date(scheda.dataInizio).toLocaleDateString("it-IT")} -{" "}
-            {new Date(scheda.dataFine).toLocaleDateString("it-IT")}
-          </p>
-          <p>{scheda.obiettivo}</p>
-        </li>
-      ))}
-    </ul>
+    <>
+      {schede.length === 0 ? (
+        <p className="muted">Nessuna scheda associata a questo cliente.</p>
+      ) : (
+        <div
+          className="schede-table-wrapper"
+          aria-label="Tabella schede cliente"
+        >
+          <table className="schede-table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Data inizio</th>
+                <th scope="col">Data fine</th>
+                <th scope="col">Obiettivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedSchede.map((scheda) => (
+                <tr
+                  key={scheda.id}
+                  className="schede-row-clickable"
+                  tabIndex={0}
+                  onClick={() =>
+                    navigate(`/clienti/${clienteId}/schede/${scheda.id}`)
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      navigate(`/clienti/${clienteId}/schede/${scheda.id}`);
+                    }
+                  }}
+                  aria-label={`Apri dettaglio scheda ${scheda.id}`}
+                >
+                  <td>{scheda.id}</td>
+                  <td>
+                    {new Date(scheda.dataInizio).toLocaleDateString("it-IT")}
+                  </td>
+                  <td>
+                    {new Date(scheda.dataFine).toLocaleDateString("it-IT")}
+                  </td>
+                  <td>{scheda.obiettivo}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <div className="detail-actions">
+        <button type="button" className="btn" onClick={handleOpenCreateModal}>
+          Nuova scheda
+        </button>
+      </div>
+
+      {isCreateModalOpen &&
+        createPortal(
+          <div
+            className="modal-overlay"
+            onClick={
+              !isCreatingScheda ? () => setIsCreateModalOpen(false) : undefined
+            }
+          >
+            <div
+              className="modal"
+              aria-modal="true"
+              aria-labelledby="new-scheda-title"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h2 id="new-scheda-title" className="modal-title">
+                  Nuova scheda
+                </h2>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  onClick={() => setIsCreateModalOpen(false)}
+                  disabled={isCreatingScheda}
+                >
+                  Chiudi
+                </button>
+              </div>
+
+              <form className="modal-form" onSubmit={handleCreateScheda}>
+                <label className="modal-field modal-field--full">
+                  Data inizio
+                  <input
+                    name="dataInizio"
+                    type="date"
+                    value={newSchedaForm.dataInizio}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </label>
+
+                <label className="modal-field modal-field--full">
+                  Data fine
+                  <input
+                    name="dataFine"
+                    type="date"
+                    value={newSchedaForm.dataFine}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </label>
+
+                <label className="modal-field modal-field--full">
+                  Obiettivo
+                  <textarea
+                    name="obiettivo"
+                    value={newSchedaForm.obiettivo}
+                    onChange={handleFormChange}
+                    rows={4}
+                    required
+                  />
+                </label>
+
+                {createError && <p className="error-text">{createError}</p>}
+
+                <div className="modal-actions">
+                  <button
+                    type="button"
+                    className="btn btn--ghost"
+                    onClick={() => setIsCreateModalOpen(false)}
+                    disabled={isCreatingScheda}
+                  >
+                    Annulla
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn"
+                    disabled={isCreatingScheda}
+                  >
+                    {isCreatingScheda ? "Salvataggio..." : "Crea scheda"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>,
+          document.body,
+        )}
+    </>
   );
 };
 

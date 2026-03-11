@@ -59,19 +59,6 @@ const DatiClienteTab: FC = () => {
 
   return (
     <>
-      <div className="detail-actions">
-        <button
-          type="button"
-          className="btn"
-          onClick={() => {
-            setSaveError(null);
-            setIsEditModalOpen(true);
-          }}
-        >
-          Modifica dati
-        </button>
-      </div>
-
       {saveError && <p className="error-text detail-save-error">{saveError}</p>}
 
       <dl className="detail-grid">
@@ -135,6 +122,19 @@ const DatiClienteTab: FC = () => {
           </div>
         </div>
       </dl>
+
+      <div className="detail-actions">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            setSaveError(null);
+            setIsEditModalOpen(true);
+          }}
+        >
+          Modifica dati
+        </button>
+      </div>
 
       {isEditModalOpen && (
         <EditClienteModal

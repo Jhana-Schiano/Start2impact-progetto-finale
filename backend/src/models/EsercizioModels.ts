@@ -31,6 +31,22 @@ const Esercizio = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    numero_serie: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    ripetizioni: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    riposo: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    volume: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     tableName: "esercizi",

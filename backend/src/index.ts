@@ -2,7 +2,13 @@ import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import { fileURLToPath } from "node:url";
 import sequelize, { ensureDatabaseExists } from "./config/database.js";
-import { allenamentiRoutes, eserciziRoutes , clientiRoutes , schedeRoutes , serieRoutes , utentiRoutes } from "./routes/index.js";
+import {
+  allenamentiRoutes,
+  eserciziRoutes,
+  clientiRoutes,
+  schedeRoutes,
+  utentiRoutes,
+} from "./routes/index.js";
 
 const app = express();
 
@@ -18,7 +24,6 @@ app.use("/api/clienti", clientiRoutes);
 app.use("/api/schede", schedeRoutes);
 app.use("/api/allenamenti", allenamentiRoutes);
 app.use("/api/esercizi", eserciziRoutes);
-app.use("/api/serie", serieRoutes);
 
 const port = Number(process.env.PORT ?? 5000);
 

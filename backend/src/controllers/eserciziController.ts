@@ -16,11 +16,30 @@ export const getAllEsercizi = async (_req: Request, res: Response) => {
 
 export const createEsercizio = async (req: Request, res: Response) => {
   try {
-    const { nome, attrezzo, allenamentoId, ordine } = req.body;
+    const {
+      nome,
+      attrezzo,
+      allenamentoId,
+      ordine,
+      numeroSerie,
+      ripetizioni,
+      riposo,
+      volume,
+    } = req.body;
 
-    if (!nome || !attrezzo || allenamentoId == null || ordine == null) {
+    if (
+      !nome ||
+      !attrezzo ||
+      allenamentoId == null ||
+      ordine == null ||
+      numeroSerie == null ||
+      ripetizioni == null ||
+      riposo == null ||
+      volume == null
+    ) {
       return res.status(400).json({
-        error: "nome, attrezzo, allenamentoId e ordine sono obbligatori",
+        error:
+          "nome, attrezzo, allenamentoId, ordine, numeroSerie, ripetizioni, riposo e volume sono obbligatori",
       });
     }
 
@@ -29,6 +48,10 @@ export const createEsercizio = async (req: Request, res: Response) => {
       attrezzo,
       allenamento_id: allenamentoId,
       ordine,
+      numero_serie: numeroSerie,
+      ripetizioni,
+      riposo,
+      volume,
     });
 
     return res.status(201).json({

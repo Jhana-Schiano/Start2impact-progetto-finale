@@ -7,6 +7,7 @@ import {
   PalestraPage,
   ProfiloPage,
   RegisterPage,
+  Scheda,
   SchedeClienteTab,
 } from "./areas/Index";
 import { MainLayout } from "./components/Index";
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
           {
             path: "schede",
             element: <SchedeClienteTab />,
+          },
+          {
+            path: "schede/:schedaId",
+            element: <Scheda />,
           },
         ],
       },

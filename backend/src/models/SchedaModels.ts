@@ -9,10 +9,6 @@ const Scheda = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    titolo: {
-      type: DataTypes.STRING(150),
-      allowNull: false,
-    },
     data_inizio: {
       type: DataTypes.DATEONLY,
       allowNull: false,

@@ -6,4 +6,5 @@ export { default as LoginPage } from "./Auth/LoginPage";
 export { default as DettaglioClientePage } from "./DettaglioCliente/DettaglioClientePage";
 export { default as DatiClienteTab } from "./DettaglioCliente/DatiClienteTab";
 export { default as SchedeClienteTab } from "./DettaglioCliente/SchedeClienteTab";
+export { default as Scheda } from "./Scheda/Scheda";
 

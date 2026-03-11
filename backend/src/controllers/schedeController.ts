@@ -16,17 +16,10 @@ export const getAllSchede = async (_req: Request, res: Response) => {
 
 export const createScheda = async (req: Request, res: Response) => {
   try {
-    const {
-      titolo,
-      dataInizio,
-      dataFine,
-      personalTrainerId,
-      obiettivo,
-      clienteId,
-    } = req.body;
+    const { dataInizio, dataFine, personalTrainerId, obiettivo, clienteId } =
+      req.body;
 
     if (
-      !titolo ||
       !dataInizio ||
       !dataFine ||
       personalTrainerId == null ||
@@ -35,12 +28,11 @@ export const createScheda = async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({
         error:
-          "titolo, dataInizio, dataFine, personalTrainerId, obiettivo e clienteId sono obbligatori",
+          "dataInizio, dataFine, personalTrainerId, obiettivo e clienteId sono obbligatori",
       });
     }
 
     const nuovaScheda = await Scheda.create({
-      titolo,
       data_inizio: dataInizio,
       data_fine: dataFine,
       personal_trainer_id: personalTrainerId,

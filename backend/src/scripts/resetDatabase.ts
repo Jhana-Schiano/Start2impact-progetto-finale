@@ -5,7 +5,6 @@ import "../models/AllenamentoModels.js";
 import "../models/ClienteModels.js";
 import "../models/EsercizioModels.js";
 import "../models/SchedaModels.js";
-import "../models/SerieModels.js";
 import "../models/UtenteModel.js";
 
 const resetDatabase = async () => {
