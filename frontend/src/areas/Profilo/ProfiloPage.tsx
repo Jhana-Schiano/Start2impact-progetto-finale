@@ -7,22 +7,20 @@ import {
   type FC,
   type SyntheticEvent,
 } from "react";
-import { useNavigate } from "react-router-dom";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
+import useLogout from "../../auth/useLogout";
+import useRequiredUserId from "../../auth/useRequiredUserId";
 import {
   getUtenteById,
   updateUtenteContatti,
   type Utente,
 } from "../../api/utenti";
 import { ErrorState, PrimaryButton } from "../../components/Index";
-import { logout } from "../../store/authSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import "./ProfiloPage.css";
 
 const ProfiloPage: FC = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const userId = useAppSelector((state) => state.auth.userId);
+  const userId = useRequiredUserId();
+  const handleLogout = useLogout();
   const [utente, setUtente] = useState<Utente | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -152,11 +150,6 @@ const ProfiloPage: FC = () => {
     } finally {
       setIsSavingContacts(false);
     }
-  };
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/login", { replace: true });
   };
 
   return (

@@ -1,18 +1,10 @@
 import "./MainLayout.css";
 import { Header, Menu } from "../Index";
 import type { FC, PropsWithChildren } from "react";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../store/authSlice";
-import { useAppDispatch } from "../../store/hooks";
+import useLogout from "../../auth/useLogout";
 
 const MainLayout: FC<PropsWithChildren> = (props) => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/login", { replace: true });
-  };
+  const handleLogout = useLogout();
 
   return (
     <div className="layout-shell">

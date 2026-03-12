@@ -8,13 +8,13 @@ import {
   type SyntheticEvent,
 } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import useRequiredUserId from "../../auth/useRequiredUserId";
 import {
   createScheda,
   getSchedeByClienteId,
   type Scheda,
 } from "../../api/schede";
 import { ErrorState, ModalBase, PrimaryButton } from "../../components/Index";
-import { useAppSelector } from "../../store/hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 
 type NewSchedaFormState = {
@@ -33,7 +33,7 @@ const SchedeClienteTab: FC = () => {
   const { clienteId, errorCliente, isLoadingCliente } =
     useOutletContext<DettaglioClienteContext>();
   const navigate = useNavigate();
-  const userId = useAppSelector((state) => state.auth.userId);
+  const userId = useRequiredUserId();
   const [schede, setSchede] = useState<Scheda[]>([]);
   const [isLoadingSchede, setIsLoadingSchede] = useState(true);
   const [errorSchede, setErrorSchede] = useState<string | null>(null);

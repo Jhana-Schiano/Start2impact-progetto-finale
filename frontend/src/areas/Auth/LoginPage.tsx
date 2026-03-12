@@ -1,7 +1,11 @@
-import { useEffect, useState, type FC, type SyntheticEvent } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, type FC, type SyntheticEvent } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import "./Auth.css";
-import { loginUser } from "../../store/authSlice";
+import {
+  loginUser,
+  selectAuthState,
+  selectIsAuthenticated,
+} from "../../store/authSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 type LocationState = {
@@ -16,7 +20,8 @@ const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId, isLoading, error } = useAppSelector((state) => state.auth);
+  const { isLoading, error } = useAppSelector(selectAuthState);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const locationState = location.state as LocationState | null;
   const redirectTo =
@@ -24,11 +29,9 @@ const LoginPage: FC = () => {
       ? locationState.from
       : "/profilo";
 
-  useEffect(() => {
-    if (userId) {
-      navigate(redirectTo, { replace: true });
-    }
-  }, [navigate, redirectTo, userId]);
+  if (isAuthenticated) {
+    return <Navigate to={redirectTo} replace />;
+  }
 
   const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();

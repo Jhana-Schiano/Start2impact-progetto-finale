@@ -1,5 +1,6 @@
 import type { FC, PropsWithChildren } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { selectIsAuthenticated } from "../store/authSlice";
 import { useAppSelector } from "../store/hooks";
 
 type LocationState = {
@@ -7,11 +8,11 @@ type LocationState = {
 };
 
 const RequireAuth: FC<PropsWithChildren> = ({ children }) => {
-  const userId = useAppSelector((state) => state.auth.userId);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const location = useLocation();
   const state = location.state as LocationState | null;
 
-  if (!userId) {
+  if (!isAuthenticated) {
     return (
       <Navigate
         to="/login"
