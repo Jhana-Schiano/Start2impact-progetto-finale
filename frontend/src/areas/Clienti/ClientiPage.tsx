@@ -1,8 +1,10 @@
 import { useEffect, useState, type FC } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import {
   createCliente,
   getAllClienti,
+  type ClientiPagination,
   type Cliente,
   type CreateClienteInput,
 } from "../../api/clienti";
@@ -10,8 +12,22 @@ import { PrimaryButton } from "../../components/Index";
 import CreateClienteModal from "./CreateClienteModal";
 import "./ClientiPage.css";
 
+const CLIENTI_PER_PAGE = 10;
+
+const initialPagination: ClientiPagination = {
+  page: 1,
+  limit: CLIENTI_PER_PAGE,
+  totalItems: 0,
+  totalPages: 1,
+  hasPreviousPage: false,
+  hasNextPage: false,
+};
+
 const ClientiPage: FC = () => {
   const [clienti, setClienti] = useState<Cliente[]>([]);
+  const [pagination, setPagination] =
+    useState<ClientiPagination>(initialPagination);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,10 +35,15 @@ const ClientiPage: FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const loadClienti = async () => {
+  const loadClienti = async (page: number) => {
     try {
-      const response = await getAllClienti();
-      setClienti(response);
+      setIsLoading(true);
+      const response = await getAllClienti(page, CLIENTI_PER_PAGE);
+      setClienti(response.data);
+      setPagination({
+        ...response.pagination,
+        totalPages: Math.max(1, response.pagination.totalPages),
+      });
       setError(null);
     } catch (err) {
       //TODO: Mostrare il messaggio di errore, ma anche una icona o qualcosa di più visibile e centrato(component ad hoc)
@@ -33,8 +54,8 @@ const ClientiPage: FC = () => {
   };
 
   useEffect(() => {
-    loadClienti();
-  }, []);
+    loadClienti(currentPage);
+  }, [currentPage]);
 
   const handleCreateCliente = async (payload: CreateClienteInput) => {
     try {
@@ -42,8 +63,7 @@ const ClientiPage: FC = () => {
       setSubmitError(null);
       await createCliente(payload);
       setIsModalOpen(false);
-      setIsLoading(true);
-      await loadClienti();
+      await loadClienti(currentPage);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Errore imprevisto");
     } finally {
@@ -111,6 +131,39 @@ const ClientiPage: FC = () => {
           </tbody>
         </table>
       </div>
+
+      {!error && (
+        <footer className="clienti-pagination" aria-label="Paginazione clienti">
+          <p className="muted clienti-pagination-info">
+            Pagina {pagination.page} di {pagination.totalPages} · Totale: {" "}
+            {pagination.totalItems}
+          </p>
+
+          <div className="clienti-pagination-actions">
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() => setCurrentPage((page) => page - 1)}
+              disabled={isLoading || !pagination.hasPreviousPage}
+              aria-label="Pagina precedente"
+              title="Pagina precedente"
+            >
+              <HiChevronLeft aria-hidden="true" size={18} />
+            </button>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() => setCurrentPage((page) => page + 1)}
+              disabled={isLoading || !pagination.hasNextPage}
+              aria-label="Pagina successiva"
+              title="Pagina successiva"
+            >
+              <HiChevronRight aria-hidden="true" size={18} />
+            </button>
+          </div>
+        </footer>
+      )}
+
       {error && <p className="muted">{error}</p>}
       {isModalOpen && (
         <CreateClienteModal

@@ -1,11 +1,7 @@
 # Start2impact-progetto-finale
-
-BACKEND APPUNTI
-
-
 requisiti "tecnici"
 - test 
-- messaggi di feedback:
+- messaggi di feedback: (tramite toast)
         - messaggio di benvenuto quando si logga
         - messaggio di creazione corretta della scheda/allenamento 
         - cliente creato con successo 
@@ -16,8 +12,6 @@ palestra : JS Gym
 --> SEEDING: controlla come inserire dei dati di "test" nel db 
 
 FRONTEND APPUNTI
-header e layout dovrebbero avere lo stesso colore/profondità? (header sembra troppo visibile)
-
 
 - puoi usare errorElement nel router per gli errori di render (se sollevo una eccezione che però non mi porta a renderizzare la pagina, allora non comparirà la pagina di errore)
 - fai una pagina bella per il 404
@@ -36,3 +30,7 @@ potrebbe anche controllare che esista nel db
 
 
 
+1. paginazione clienti
+2. gestione errori 
+3. gestione is loading 
+4. messaggi di feedback tramite toast 

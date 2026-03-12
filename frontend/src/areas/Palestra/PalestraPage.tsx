@@ -41,6 +41,10 @@ const PalestraPage: FC = () => {
             <p className="muted">P.IVA: {datiPalestra.palestra.partitaIva}</p>
           </header>
 
+          <hr className="palestra-divider" aria-hidden="true" />
+
+          <h2 className="palestra-subtitle">Attrezzi</h2>
+
           <div className="palestra-table-wrapper" aria-label="Tabella attrezzi">
             <table className="palestra-table">
               <thead>

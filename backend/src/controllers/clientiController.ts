@@ -2,13 +2,62 @@ import type { Request, Response } from "express";
 import Cliente from "../models/ClienteModels.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
 
-export const getAllClienti = async (_req: Request, res: Response) => {
+export const getAllClienti = async (req: Request, res: Response) => {
   try {
-    const clienti = await Cliente.findAll({
+    const rawPage = Array.isArray(req.query.page)
+      ? req.query.page[0]
+      : req.query.page;
+    const rawLimit = Array.isArray(req.query.limit)
+      ? req.query.limit[0]
+      : req.query.limit;
+
+    const hasPagination = rawPage != null || rawLimit != null;
+
+    if (!hasPagination) {
+      const clienti = await Cliente.findAll({
+        order: [["id", "ASC"]],
+      });
+
+      return res.status(200).json(clienti);
+    }
+
+    const page = rawPage == null ? 1 : Number(rawPage);
+    const limit = rawLimit == null ? 10 : Number(rawLimit);
+
+    if (
+      !Number.isInteger(page) ||
+      page <= 0 ||
+      !Number.isInteger(limit) ||
+      limit <= 0 ||
+      limit > 100
+    ) {
+      return res.status(400).json({
+        error:
+          "Parametri query non validi: page e limit devono essere interi positivi (limit max 100)",
+      });
+    }
+
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await Cliente.findAndCountAll({
       order: [["id", "ASC"]],
+      limit,
+      offset,
     });
 
-    return res.status(200).json(clienti);
+    const totalPages = Math.ceil(count / limit);
+
+    return res.status(200).json({
+      data: rows,
+      pagination: {
+        page,
+        limit,
+        totalItems: count,
+        totalPages,
+        hasPreviousPage: page > 1,
+        hasNextPage: page < totalPages,
+      },
+    });
   } catch (error) {
     console.error("Errore recupero clienti:", error);
     return res.status(500).json({ error: "Errore interno del server" });

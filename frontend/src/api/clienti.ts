@@ -6,6 +6,20 @@ export type Cliente = {
   sesso: "M" | "F" | "Altro";
 };
 
+export type ClientiPagination = {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+
+export type GetAllClientiResult = {
+  data: Cliente[];
+  pagination: ClientiPagination;
+};
+
 export type ClienteDettaglio = {
   id: number;
   nome: string;
@@ -69,6 +83,20 @@ type GetAllClientiResponse = {
   sesso: "M" | "F" | "Altro";
 };
 
+type GetAllClientiPaginationResponse = {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+
+type GetAllClientiPaginatedResponse = {
+  data: GetAllClientiResponse[];
+  pagination: GetAllClientiPaginationResponse;
+};
+
 type GetClienteByIdResponse = {
   id: number;
   nome: string;
@@ -89,22 +117,28 @@ type GetClienteByIdResponse = {
   note: string | null;
 };
 
-export const getAllClienti = async (): Promise<Cliente[]> => {
-  const response = await fetch("/api/clienti");
+export const getAllClienti = async (
+  page = 1,
+  limit = 10,
+): Promise<GetAllClientiResult> => {
+  const response = await fetch(`/api/clienti?page=${page}&limit=${limit}`);
 
   if (!response.ok) {
     throw new Error("Errore nel recupero clienti");
   }
 
-  const data = (await response.json()) as GetAllClientiResponse[];
+  const payload = (await response.json()) as GetAllClientiPaginatedResponse;
 
-  return data.map((cliente) => ({
-    id: cliente.id,
-    nome: cliente.nome,
-    cognome: cliente.cognome,
-    dataNascita: cliente.data_nascita,
-    sesso: cliente.sesso,
-  }));
+  return {
+    data: payload.data.map((cliente) => ({
+      id: cliente.id,
+      nome: cliente.nome,
+      cognome: cliente.cognome,
+      dataNascita: cliente.data_nascita,
+      sesso: cliente.sesso,
+    })),
+    pagination: payload.pagination,
+  };
 };
 
 export const getClienteById = async (
