@@ -10,6 +10,7 @@ type ModalBaseProps = PropsWithChildren<{
   ariaLabelledBy?: string;
 }>;
 
+// Base riusabile per modali con overlay, escape e render su portal.
 const ModalBase: FC<ModalBaseProps> = ({
   isOpen,
   onClose,

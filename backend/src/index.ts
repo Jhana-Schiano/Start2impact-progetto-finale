@@ -20,6 +20,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+// Registra le route API suddivise per risorsa.
 app.use("/api/utenti", utentiRoutes);
 app.use("/api/clienti", clientiRoutes);
 app.use("/api/palestra", palestraRoutes);
@@ -29,8 +30,10 @@ app.use("/api/esercizi", eserciziRoutes);
 
 const port = Number(process.env.PORT ?? 5000);
 
+// Avvia il server solo quando il file e eseguito come entrypoint principale.
 const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMainModule) {
+  // Crea il database se assente, inizializza Sequelize e avvia il server HTTP.
   ensureDatabaseExists()
     .then(() => sequelize.authenticate())
     .then(() => sequelize.sync())

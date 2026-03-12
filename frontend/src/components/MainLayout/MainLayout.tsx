@@ -3,6 +3,7 @@ import { Header, Menu } from "../Index";
 import type { FC, PropsWithChildren } from "react";
 import useLogout from "../../auth/useLogout";
 
+// Layout principale autenticato con header fisso e contenuto navigabile.
 const MainLayout: FC<PropsWithChildren> = (props) => {
   const handleLogout = useLogout();
 

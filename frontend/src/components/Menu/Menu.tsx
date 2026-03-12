@@ -10,6 +10,7 @@ import {
 } from "react-icons/hi2";
 import "./Menu.css";
 
+// Menu laterale collassabile con link di navigazione alle aree principali.
 const Menu: FC<PropsWithChildren> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
 

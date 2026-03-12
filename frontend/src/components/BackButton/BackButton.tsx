@@ -9,6 +9,7 @@ type BackButtonProps = {
   to?: To;
 };
 
+// Pulsante di navigazione che torna alla pagina precedente o a una route specifica.
 const BackButton: FC<BackButtonProps> = ({
   ariaLabel = "Indietro",
   title = "Indietro",

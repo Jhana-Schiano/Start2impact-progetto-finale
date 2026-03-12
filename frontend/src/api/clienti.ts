@@ -119,7 +119,7 @@ type GetClienteByIdResponse = {
 
 export const getAllClienti = async (
   page = 1,
-  limit = 10,
+  limit = 7,
 ): Promise<GetAllClientiResult> => {
   const response = await fetch(`/api/clienti?page=${page}&limit=${limit}`);
 

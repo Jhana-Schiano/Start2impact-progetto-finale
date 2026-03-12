@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import Scheda from "../models/SchedaModels.js";
 
+// Recupera tutte le schede ordinate per id.
 export const getAllSchede = async (_req: Request, res: Response) => {
   try {
     const schede = await Scheda.findAll({
@@ -14,6 +15,7 @@ export const getAllSchede = async (_req: Request, res: Response) => {
   }
 };
 
+// Recupera una scheda specifica tramite id.
 export const getSchedaById = async (req: Request, res: Response) => {
   const schedaId = Number(req.params.id);
 
@@ -35,6 +37,7 @@ export const getSchedaById = async (req: Request, res: Response) => {
   }
 };
 
+// Crea una nuova scheda per cliente e personal trainer.
 export const createScheda = async (req: Request, res: Response) => {
   try {
     const { dataInizio, dataFine, personalTrainerId, obiettivo, clienteId } =

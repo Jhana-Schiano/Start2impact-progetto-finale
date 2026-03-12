@@ -13,7 +13,7 @@ import { useToast } from "../../hooks";
 import CreateClienteModal from "./CreateClienteModal";
 import "./ClientiPage.css";
 
-const CLIENTI_PER_PAGE = 10;
+const CLIENTI_PER_PAGE = 7;
 
 const initialPagination: ClientiPagination = {
   page: 1,

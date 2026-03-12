@@ -10,6 +10,7 @@ const databasePassword = process.env.DB_PASSWORD ?? "root";
 
 const databaseLogging = (process.env.DB_LOGGING ?? "false") === "true";
 
+// Verifica che il database esista.
 export const ensureDatabaseExists = async (): Promise<void> => {
   const connection = await createConnection({
     host: databaseHost,
@@ -22,6 +23,7 @@ export const ensureDatabaseExists = async (): Promise<void> => {
   await connection.end();
 };
 
+// Istanza Sequelize principale usata nel backend per la connessione MySQL.
 const sequelize = new Sequelize(databaseName, databaseUser, databasePassword, {
   host: databaseHost,
   port: databasePort,

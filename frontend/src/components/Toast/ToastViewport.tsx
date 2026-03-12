@@ -11,6 +11,7 @@ type ToastRowProps = {
   toast: ToastItem;
 };
 
+// Singolo elemento toast con auto-chiusura e chiusura manuale.
 const ToastRow: FC<ToastRowProps> = ({ toast }) => {
   const dispatch = useAppDispatch();
 
@@ -47,6 +48,7 @@ const ToastRow: FC<ToastRowProps> = ({ toast }) => {
   );
 };
 
+// Contenitore globale che visualizza la coda dei toast nello stato Redux.
 const ToastViewport: FC = () => {
   const toasts = useAppSelector(selectToasts);
 

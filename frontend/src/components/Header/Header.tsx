@@ -6,6 +6,7 @@ interface HeaderProps {
   onLogout?: () => void;
 }
 
+// Header principale dell'app con logo testuale e azione di logout.
 const Header: FC<HeaderProps> = ({ onLogout }) => {
   const handleLogout = () => {
     onLogout?.();

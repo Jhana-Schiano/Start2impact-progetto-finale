@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import Allenamento from "../models/AllenamentoModels.js";
 
+// Recupera l'elenco completo degli allenamenti ordinati per id.
 export const getAllAllenamenti = async (_req: Request, res: Response) => {
   try {
     const allenamenti = await Allenamento.findAll({
@@ -14,6 +15,7 @@ export const getAllAllenamenti = async (_req: Request, res: Response) => {
   }
 };
 
+// Crea un nuovo allenamento associato a una scheda esistente.
 export const createAllenamento = async (req: Request, res: Response) => {
   try {
     const { schedaId, durataStimata, areeCoinvolte, giorno } = req.body;

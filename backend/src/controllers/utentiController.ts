@@ -3,6 +3,7 @@ import { compare, hash } from "bcryptjs";
 import Utente from "../models/UtenteModel.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
 
+// Verifica le credenziali e autentica l'utente.
 export const loginUtente = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -49,6 +50,7 @@ export const loginUtente = async (req: Request, res: Response) => {
   }
 };
 
+// Recupera il profilo utente tramite id.
 export const getUtenteById = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
@@ -76,6 +78,7 @@ export const getUtenteById = async (req: Request, res: Response) => {
   }
 };
 
+// Crea un nuovo utente con password cifrata.
 export const createUtente = async (req: Request, res: Response) => {
   try {
     const { nome, cognome, email, password, telefono, data_nascita, sesso } =
@@ -147,6 +150,7 @@ export const createUtente = async (req: Request, res: Response) => {
   }
 };
 
+// Aggiorna i contatti dell'utente (email e/o telefono).
 export const modificaContatti = async (req: Request, res: Response) => {
   try {
     const idParam = req.params.id;

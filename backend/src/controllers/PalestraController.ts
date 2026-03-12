@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import Attrezzo from "../models/AttrezziModels.js";
 import Palestra from "../models/PalestraModels.js";
 
+// Recupera i dati della palestra e l'elenco degli attrezzi associati.
 export const getPalestraDati = async (req: Request, res: Response) => {
   const palestraId = Number(req.params.id);
 

@@ -7,6 +7,7 @@ type ErrorStateProps = {
   className?: string;
 };
 
+// Stato di errore riusabile con icona e messaggio accessibile.
 const ErrorState: FC<ErrorStateProps> = ({ message, className }) => {
   const rootClassName = className ? `error-state ${className}` : "error-state";
 

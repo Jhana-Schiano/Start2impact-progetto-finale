@@ -8,6 +8,7 @@ type PrimaryButtonProps = Omit<
   children: ReactNode;
 };
 
+// Pulsante primario stilizzato usato come call-to-action principale.
 const PrimaryButton: FC<PrimaryButtonProps> = ({
   children,
   type = "button",

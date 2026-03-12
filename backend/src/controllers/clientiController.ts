@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import Cliente from "../models/ClienteModels.js";
 import { isEmailValid, isPhoneValid } from "../services/validationService.js";
 
+// Recupera i clienti con supporto opzionale alla paginazione.
 export const getAllClienti = async (req: Request, res: Response) => {
   try {
     const rawPage = Array.isArray(req.query.page)
@@ -64,6 +65,7 @@ export const getAllClienti = async (req: Request, res: Response) => {
   }
 };
 
+// Recupera il dettaglio di un cliente tramite id.
 export const getClienteById = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
@@ -89,6 +91,7 @@ export const getClienteById = async (req: Request, res: Response) => {
   }
 };
 
+// Crea un nuovo cliente dopo le validazioni dei campi richiesti.
 export const createCliente = async (req: Request, res: Response) => {
   try {
     const {
@@ -218,6 +221,7 @@ export const createCliente = async (req: Request, res: Response) => {
   }
 };
 
+// Aggiorna i dati del cliente indicato dall'id.
 export const aggiornaCliente = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);

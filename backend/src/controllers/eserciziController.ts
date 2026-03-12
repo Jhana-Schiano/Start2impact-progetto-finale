@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import Esercizio from "../models/EsercizioModels.js";
 
+// Recupera tutti gli esercizi ordinati per id.
 export const getAllEsercizi = async (_req: Request, res: Response) => {
   try {
     const esercizi = await Esercizio.findAll({
@@ -14,6 +15,7 @@ export const getAllEsercizi = async (_req: Request, res: Response) => {
   }
 };
 
+// Crea un nuovo esercizio collegato a un allenamento.
 export const createEsercizio = async (req: Request, res: Response) => {
   try {
     const {
@@ -87,6 +89,7 @@ export const createEsercizio = async (req: Request, res: Response) => {
   }
 };
 
+// Elimina un esercizio esistente tramite id.
 export const deleteEsercizio = async (req: Request, res: Response) => {
   const esercizioId = Number(req.params.id);
 
