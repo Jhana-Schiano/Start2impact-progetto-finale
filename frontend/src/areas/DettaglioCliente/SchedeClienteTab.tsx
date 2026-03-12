@@ -14,6 +14,7 @@ import {
   getSchedeByClienteId,
   type Scheda,
 } from "../../api/schede";
+import { PrimaryButton } from "../../components/Index";
 import { useAppSelector } from "../../store/hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 import "../Clienti/CreateClienteModal.css";
@@ -208,9 +209,9 @@ const SchedeClienteTab: FC = () => {
       )}
 
       <div className="detail-actions">
-        <button type="button" className="btn" onClick={handleOpenCreateModal}>
+        <PrimaryButton type="button" onClick={handleOpenCreateModal}>
           Nuova scheda
-        </button>
+        </PrimaryButton>
       </div>
 
       {isCreateModalOpen &&

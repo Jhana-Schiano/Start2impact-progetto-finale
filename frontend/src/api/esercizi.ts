@@ -82,3 +82,17 @@ export const createEsercizio = async (
   const data = (await response.json()) as { id: number };
   return data.id;
 };
+
+export const deleteEsercizio = async (esercizioId: number): Promise<void> => {
+  const response = await fetch(`/api/esercizi/${esercizioId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+
+    throw new Error(errorData?.error ?? "Errore nell'eliminazione esercizio");
+  }
+};

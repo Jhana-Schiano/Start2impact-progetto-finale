@@ -14,6 +14,7 @@ import {
   updateUtenteContatti,
   type Utente,
 } from "../../api/utenti";
+import { PrimaryButton } from "../../components/Index";
 import { logout } from "../../store/authSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import "./ProfiloPage.css";
@@ -181,17 +182,16 @@ const ProfiloPage: FC = () => {
       )}
 
       <div className="profilo-actions">
-        <button
+        <PrimaryButton
           type="button"
-          className="btn btn--ghost profilo-edit-btn"
           onClick={handleOpenEditModal}
           disabled={!utente}
         >
           Modifica
-        </button>
+        </PrimaryButton>
         <button
           type="button"
-          className="btn profilo-logout-btn"
+          className="btn btn--ghost profilo-logout-btn"
           title="Logout"
           aria-label="Logout"
           onClick={handleLogout}

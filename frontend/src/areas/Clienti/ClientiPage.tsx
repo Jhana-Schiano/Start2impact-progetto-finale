@@ -6,6 +6,7 @@ import {
   type Cliente,
   type CreateClienteInput,
 } from "../../api/clienti";
+import { PrimaryButton } from "../../components/Index";
 import CreateClienteModal from "./CreateClienteModal";
 import "./ClientiPage.css";
 
@@ -58,13 +59,9 @@ const ClientiPage: FC = () => {
     <section className="panel clienti-section reveal">
       <header className="clienti-header">
         <h1 className="section-title">Clienti</h1>
-        <button
-          type="button"
-          className="btn"
-          onClick={() => setIsModalOpen(true)}
-        >
+        <PrimaryButton type="button" onClick={() => setIsModalOpen(true)}>
           Nuovo cliente
-        </button>
+        </PrimaryButton>
       </header>
 
       {isLoading && <p className="muted">Caricamento clienti...</p>}

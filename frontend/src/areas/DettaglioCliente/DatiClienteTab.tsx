@@ -1,6 +1,7 @@
 import { useState, type FC } from "react";
 import { useOutletContext } from "react-router-dom";
 import { updateCliente, type UpdateClienteInput } from "../../api/clienti";
+import { PrimaryButton } from "../../components/Index";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 import EditClienteModal from "./EditClienteModal";
 
@@ -124,16 +125,15 @@ const DatiClienteTab: FC = () => {
       </dl>
 
       <div className="detail-actions">
-        <button
+        <PrimaryButton
           type="button"
-          className="btn"
           onClick={() => {
             setSaveError(null);
             setIsEditModalOpen(true);
           }}
         >
           Modifica dati
-        </button>
+        </PrimaryButton>
       </div>
 
       {isEditModalOpen && (

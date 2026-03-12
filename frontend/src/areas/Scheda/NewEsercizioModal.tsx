@@ -1,5 +1,6 @@
 import type { ChangeEvent, FC, SyntheticEvent } from "react";
 import { createPortal } from "react-dom";
+import { PrimaryButton } from "../../components/Index";
 import "../Clienti/CreateClienteModal.css";
 
 type NewEsercizioFormState = {
@@ -145,9 +146,9 @@ const NewEsercizioModal: FC<NewEsercizioModalProps> = ({
             >
               Annulla
             </button>
-            <button type="submit" className="btn" disabled={isSubmitting}>
+            <PrimaryButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Salvataggio..." : "Crea esercizio"}
-            </button>
+            </PrimaryButton>
           </div>
         </form>
       </div>

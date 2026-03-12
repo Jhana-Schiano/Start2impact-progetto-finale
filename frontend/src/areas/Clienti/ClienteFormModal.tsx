@@ -6,6 +6,7 @@ import {
   type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import { PrimaryButton } from "../../components/Index";
 import "./CreateClienteModal.css";
 
 export type ClienteFormValues = {
@@ -467,14 +468,13 @@ const ClienteFormModal: FC<ClienteFormModalProps> = ({
             )}
 
             {mode === "create" && step === 1 ? (
-              <button
+              <PrimaryButton
                 type="button"
-                className="btn"
                 onClick={() => setStep(2)}
                 disabled={!canGoNext || isSubmitting}
               >
                 Avanti
-              </button>
+              </PrimaryButton>
             ) : (
               <button type="submit" className="btn" disabled={isSubmitting}>
                 {isSubmitting ? "Salvataggio..." : submitLabel}

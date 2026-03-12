@@ -86,3 +86,28 @@ export const createEsercizio = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Errore interno del server" });
   }
 };
+
+export const deleteEsercizio = async (req: Request, res: Response) => {
+  const esercizioId = Number(req.params.id);
+
+  if (!Number.isInteger(esercizioId) || esercizioId <= 0) {
+    return res.status(400).json({ error: "Id esercizio non valido" });
+  }
+
+  try {
+    const deletedRows = await Esercizio.destroy({
+      where: { id: esercizioId },
+    });
+
+    if (deletedRows === 0) {
+      return res.status(404).json({ error: "Esercizio non trovato" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Esercizio eliminato con successo" });
+  } catch (error) {
+    console.error("Errore eliminazione esercizio:", error);
+    return res.status(500).json({ error: "Errore interno del server" });
+  }
+};

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FC } from "react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { getClienteById, type ClienteDettaglio } from "../../api/clienti";
+import { BackButton } from "../../components/Index";
 import "./DettaglioClientePage.css";
 
 export type DettaglioClienteContext = {
@@ -54,7 +55,10 @@ const DettaglioClientePage: FC = () => {
   return (
     <section className="panel detail-page reveal">
       <header className="detail-header">
-        <h1 className="section-title">{clienteTitolo}</h1>
+        <div className="detail-header-top">
+          <BackButton to="/clienti" />
+          <h1 className="section-title">{clienteTitolo}</h1>
+        </div>
         {errorCliente && <p className="error-text">{errorCliente}</p>}
       </header>
 

@@ -4,14 +4,16 @@ import {
   type FC,
   type SyntheticEvent,
 } from "react";
-import { HiArrowLeft } from "react-icons/hi2";
-import { useNavigate, useParams } from "react-router-dom";
+import { HiTrash } from "react-icons/hi2";
+import { useParams } from "react-router-dom";
 import { ALLENAMENTO_GIORNI } from "../../api/allenamenti";
+import { BackButton, PrimaryButton } from "../../components/Index";
 import NewAllenamentoModal from "./NewAllenamentoModal";
 import NewEsercizioModal from "./NewEsercizioModal";
 import {
   useCreateAllenamento,
   useCreateEsercizio,
+  useDeleteEsercizio,
   useSchedaData,
 } from "../../hooks";
 import "./Scheda.css";
@@ -47,7 +49,6 @@ const initialNewEsercizioFormState: NewEsercizioFormState = {
 };
 
 const Scheda: FC = () => {
-  const navigate = useNavigate();
   const { id, schedaId } = useParams<{ id: string; schedaId: string }>();
   const {
     scheda,
@@ -71,6 +72,13 @@ const Scheda: FC = () => {
     clearCreateEsercizioError,
     createEsercizio,
   } = useCreateEsercizio();
+
+  const {
+    isDeletingEsercizio,
+    deleteEsercizioError,
+    clearDeleteEsercizioError,
+    deleteEsercizio,
+  } = useDeleteEsercizio();
 
   const [expandedAllenamentoId, setExpandedAllenamentoId] = useState<
     number | null
@@ -257,34 +265,25 @@ const Scheda: FC = () => {
     setTargetAllenamentoId(null);
   };
 
+  const handleDeleteEsercizio = async (esercizioId: number) => {
+    clearDeleteEsercizioError();
+    await deleteEsercizio(esercizioId);
+    await reload();
+  };
+
   return (
     <section className="panel reveal">
       <div className="scheda-header">
         <div className="scheda-header-left">
-          <span
-            className="scheda-back-icon"
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(-1)}
-            aria-label="Indietro"
-            title="Indietro"
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                navigate(-1);
-              }
-            }}
-          >
-            <HiArrowLeft aria-hidden="true" size={16} />
-          </span>
+          <BackButton />
 
           <h1 className="section-title">Scheda {scheda.id}</h1>
         </div>
 
         <div className="scheda-actions">
-          <button type="button" className="btn" onClick={openAllenamentoModal}>
+          <PrimaryButton type="button" onClick={openAllenamentoModal}>
             Nuovo allenamento
-          </button>
+          </PrimaryButton>
         </div>
       </div>
 
@@ -335,6 +334,9 @@ const Scheda: FC = () => {
                               <th scope="col">Serie x Ripetizioni</th>
                               <th scope="col">Riposo</th>
                               <th scope="col">Volume</th>
+                              <th scope="col" className="scheda-action-col">
+                                Azioni
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -352,11 +354,29 @@ const Scheda: FC = () => {
                                     ? "-"
                                     : `${esercizio.volume} kg`}
                                 </td>
+                                <td className="scheda-action-col">
+                                  <button
+                                    type="button"
+                                    className="scheda-delete-ex-btn"
+                                    aria-label={`Elimina esercizio ${esercizio.nome}`}
+                                    title="Elimina esercizio"
+                                    disabled={isDeletingEsercizio}
+                                    onClick={() =>
+                                      handleDeleteEsercizio(esercizio.id)
+                                    }
+                                  >
+                                    <HiTrash aria-hidden="true" size={14} />
+                                  </button>
+                                </td>
                               </tr>
                             ))}
                           </tbody>
                         </table>
                       </div>
+                    )}
+
+                    {deleteEsercizioError && (
+                      <p className="error-text">{deleteEsercizioError}</p>
                     )}
 
                     <div className="scheda-allenamento-actions">

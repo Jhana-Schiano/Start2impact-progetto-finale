@@ -1,6 +1,7 @@
 import type { ChangeEvent, FC, SyntheticEvent } from "react";
 import { createPortal } from "react-dom";
 import { ALLENAMENTO_GIORNI } from "../../api/allenamenti";
+import { PrimaryButton } from "../../components/Index";
 import "../Clienti/CreateClienteModal.css";
 
 type NewAllenamentoFormState = {
@@ -9,12 +10,11 @@ type NewAllenamentoFormState = {
   areeCoinvolte: string;
 };
 
-
 export interface initialNewAllenamentoFormState extends NewAllenamentoFormState {
   giorno: "Lunedi";
   durataStimata: "";
   areeCoinvolte: "";
-};
+}
 
 type NewAllenamentoModalProps = {
   isOpen: boolean;
@@ -120,9 +120,9 @@ const NewAllenamentoModal: FC<NewAllenamentoModalProps> = ({
             >
               Annulla
             </button>
-            <button type="submit" className="btn" disabled={isSubmitting}>
+            <PrimaryButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Salvataggio..." : "Crea allenamento"}
-            </button>
+            </PrimaryButton>
           </div>
         </form>
       </div>

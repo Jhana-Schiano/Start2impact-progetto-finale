@@ -12,27 +12,6 @@
   gap: 8px;
 }
 
-.scheda-back-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-1);
-  cursor: pointer;
-  padding: 2px;
-  border-radius: 8px;
-  transition: color 140ms ease, background 140ms ease;
-}
-
-.scheda-back-icon:hover {
-  color: var(--ink-0);
-  background: color-mix(in srgb, var(--accent-2) 10%, white);
-}
-
-.scheda-back-icon:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
 .scheda-header .section-title {
   margin: 0;
 }
@@ -116,7 +95,7 @@
 .scheda-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 620px;
+  min-width: 700px;
 }
 
 .scheda-table th,
@@ -136,4 +115,39 @@
 
 .scheda-table tbody tr:last-child td {
   border-bottom: none;
+}
+
+.scheda-action-col {
+  width: 76px;
+  text-align: center !important;
+}
+
+.scheda-delete-ex-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #d93025 35%, white);
+  background: color-mix(in srgb, #d93025 8%, white);
+  color: #b42318;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.scheda-delete-ex-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, #d93025 16%, white);
+  color: #8f1b13;
+}
+
+.scheda-delete-ex-btn:focus-visible {
+  outline: 2px solid #d93025;
+  outline-offset: 2px;
+}
+
+.scheda-delete-ex-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
