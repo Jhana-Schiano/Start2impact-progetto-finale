@@ -13,8 +13,7 @@ import {
   getSchedeByClienteId,
   type Scheda,
 } from "../../api/schede";
-import ModalBase from "../../components/Modal/ModalBase";
-import { PrimaryButton } from "../../components/Index";
+import { ModalBase, PrimaryButton } from "../../components/Index";
 import { useAppSelector } from "../../store/hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 

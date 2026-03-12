@@ -4,8 +4,7 @@ import {
   type FC,
   type SyntheticEvent,
 } from "react";
-import ModalBase from "../../components/Modal/ModalBase";
-import { PrimaryButton } from "../../components/Index";
+import { ModalBase, PrimaryButton } from "../../components/Index";
 
 export type ClienteFormValues = {
   nome: string;

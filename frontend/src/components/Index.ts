@@ -3,3 +3,4 @@ export { default as Menu } from "./Menu/Menu";
 export { default as MainLayout } from "./MainLayout/MainLayout";
 export { default as PrimaryButton } from "./PrimaryButton/PrimaryButton";
 export { default as BackButton } from "./BackButton/BackButton";
+export { default as ModalBase } from "./Modal/ModalBase";

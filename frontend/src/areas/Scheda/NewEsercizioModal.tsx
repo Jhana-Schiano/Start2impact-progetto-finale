@@ -1,6 +1,5 @@
 import type { ChangeEvent, FC, SyntheticEvent } from "react";
-import ModalBase from "../../components/Modal/ModalBase";
-import { PrimaryButton } from "../../components/Index";
+import { ModalBase, PrimaryButton } from "../../components/Index";
 
 type NewEsercizioFormState = {
   nome: string;

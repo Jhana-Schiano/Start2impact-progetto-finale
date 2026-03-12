@@ -1,7 +1,6 @@
 import type { ChangeEvent, FC, SyntheticEvent } from "react";
 import { ALLENAMENTO_GIORNI } from "../../api/allenamenti";
-import ModalBase from "../../components/Modal/ModalBase";
-import { PrimaryButton } from "../../components/Index";
+import { ModalBase, PrimaryButton } from "../../components/Index";
 
 type NewAllenamentoFormState = {
   giorno: (typeof ALLENAMENTO_GIORNI)[number];
