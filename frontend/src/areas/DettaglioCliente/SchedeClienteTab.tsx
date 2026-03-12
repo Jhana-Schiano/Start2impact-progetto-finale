@@ -7,17 +7,16 @@ import {
   type FC,
   type SyntheticEvent,
 } from "react";
-import { createPortal } from "react-dom";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import {
   createScheda,
   getSchedeByClienteId,
   type Scheda,
 } from "../../api/schede";
+import ModalBase from "../../components/Modal/ModalBase";
 import { PrimaryButton } from "../../components/Index";
 import { useAppSelector } from "../../store/hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
-import "../Clienti/CreateClienteModal.css";
 
 type NewSchedaFormState = {
   dataInizio: string;
@@ -158,6 +157,12 @@ const SchedeClienteTab: FC = () => {
     }
   };
 
+  const handleCloseCreateModal = () => {
+    if (!isCreatingScheda) {
+      setIsCreateModalOpen(false);
+    }
+  };
+
   return (
     <>
       {schede.length === 0 ? (
@@ -214,92 +219,78 @@ const SchedeClienteTab: FC = () => {
         </PrimaryButton>
       </div>
 
-      {isCreateModalOpen &&
-        createPortal(
-          <div
-            className="modal-overlay"
-            onClick={
-              !isCreatingScheda ? () => setIsCreateModalOpen(false) : undefined
-            }
+      <ModalBase
+        isOpen={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+        closeOnEscape={!isCreatingScheda}
+        closeOnOverlayClick={!isCreatingScheda}
+        ariaLabelledBy="new-scheda-title"
+      >
+        <div className="modal-header">
+          <h2 id="new-scheda-title" className="modal-title">
+            Nuova scheda
+          </h2>
+          <button
+            type="button"
+            className="btn btn--ghost"
+            onClick={handleCloseCreateModal}
+            disabled={isCreatingScheda}
           >
-            <div
-              className="modal"
-              aria-modal="true"
-              aria-labelledby="new-scheda-title"
-              onClick={(event) => event.stopPropagation()}
+            Chiudi
+          </button>
+        </div>
+
+        <form className="modal-form" onSubmit={handleCreateScheda}>
+          <label className="modal-field modal-field--full">
+            Data inizio
+            <input
+              name="dataInizio"
+              type="date"
+              value={newSchedaForm.dataInizio}
+              onChange={handleFormChange}
+              required
+            />
+          </label>
+
+          <label className="modal-field modal-field--full">
+            Data fine
+            <input
+              name="dataFine"
+              type="date"
+              value={newSchedaForm.dataFine}
+              onChange={handleFormChange}
+              required
+            />
+          </label>
+
+          <label className="modal-field modal-field--full">
+            Obiettivo
+            <textarea
+              name="obiettivo"
+              value={newSchedaForm.obiettivo}
+              onChange={handleFormChange}
+              rows={4}
+              required
+            />
+          </label>
+
+          {createError && <p className="error-text">{createError}</p>}
+
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={handleCloseCreateModal}
+              disabled={isCreatingScheda}
             >
-              <div className="modal-header">
-                <h2 id="new-scheda-title" className="modal-title">
-                  Nuova scheda
-                </h2>
-                <button
-                  type="button"
-                  className="btn btn--ghost"
-                  onClick={() => setIsCreateModalOpen(false)}
-                  disabled={isCreatingScheda}
-                >
-                  Chiudi
-                </button>
-              </div>
-
-              <form className="modal-form" onSubmit={handleCreateScheda}>
-                <label className="modal-field modal-field--full">
-                  Data inizio
-                  <input
-                    name="dataInizio"
-                    type="date"
-                    value={newSchedaForm.dataInizio}
-                    onChange={handleFormChange}
-                    required
-                  />
-                </label>
-
-                <label className="modal-field modal-field--full">
-                  Data fine
-                  <input
-                    name="dataFine"
-                    type="date"
-                    value={newSchedaForm.dataFine}
-                    onChange={handleFormChange}
-                    required
-                  />
-                </label>
-
-                <label className="modal-field modal-field--full">
-                  Obiettivo
-                  <textarea
-                    name="obiettivo"
-                    value={newSchedaForm.obiettivo}
-                    onChange={handleFormChange}
-                    rows={4}
-                    required
-                  />
-                </label>
-
-                {createError && <p className="error-text">{createError}</p>}
-
-                <div className="modal-actions">
-                  <button
-                    type="button"
-                    className="btn btn--ghost"
-                    onClick={() => setIsCreateModalOpen(false)}
-                    disabled={isCreatingScheda}
-                  >
-                    Annulla
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn"
-                    disabled={isCreatingScheda}
-                  >
-                    {isCreatingScheda ? "Salvataggio..." : "Crea scheda"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>,
-          document.body,
-        )}
+              Annulla
+            </button>
+            <button type="submit" className="btn" disabled={isCreatingScheda}>
+              {isCreatingScheda ? "Salvataggio..." : "Crea scheda"}
+            </button>
+          </div>
+        </form>
+      </ModalBase>
     </>
   );
 };
