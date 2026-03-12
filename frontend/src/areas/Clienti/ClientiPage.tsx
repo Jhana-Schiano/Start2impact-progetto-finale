@@ -9,6 +9,7 @@ import {
   type CreateClienteInput,
 } from "../../api/clienti";
 import { ErrorState, PrimaryButton } from "../../components/Index";
+import { useToast } from "../../hooks";
 import CreateClienteModal from "./CreateClienteModal";
 import "./ClientiPage.css";
 
@@ -33,6 +34,7 @@ const ClientiPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const loadClienti = async (page: number) => {
@@ -61,6 +63,10 @@ const ClientiPage: FC = () => {
       setIsSubmitting(true);
       setSubmitError(null);
       await createCliente(payload);
+      showToast({
+        kind: "success",
+        message: `Cliente ${payload.nome} ${payload.cognome} creato con successo.`,
+      });
       setIsModalOpen(false);
       await loadClienti(currentPage);
     } catch (err) {
@@ -134,7 +140,7 @@ const ClientiPage: FC = () => {
       {!error && (
         <footer className="clienti-pagination" aria-label="Paginazione clienti">
           <p className="muted clienti-pagination-info">
-            Pagina {pagination.page} di {pagination.totalPages} · Totale: {" "}
+            Pagina {pagination.page} di {pagination.totalPages} · Totale:{" "}
             {pagination.totalItems}
           </p>
 

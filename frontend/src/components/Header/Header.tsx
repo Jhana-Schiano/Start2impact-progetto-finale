@@ -14,9 +14,9 @@ const Header: FC<HeaderProps> = ({ onLogout }) => {
   return (
     <header className="header">
       <div className="header-content">
-        <div className="header-logo">
-          <img src="assets/logo.png" alt="JS Gym Logo" className="logo-image" />
-        </div>
+        <h1 className="header-logo" aria-label="Js Gym">
+          <span className="logo-text">Js Gym</span>
+        </h1>
         <button className="logout-btn" onClick={handleLogout} title="Logout">
           <HiArrowRightOnRectangle size={24} />
         </button>

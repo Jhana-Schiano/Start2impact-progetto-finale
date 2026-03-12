@@ -15,6 +15,7 @@ import {
   type Scheda,
 } from "../../api/schede";
 import { ErrorState, ModalBase, PrimaryButton } from "../../components/Index";
+import { useToast } from "../../hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 
 type NewSchedaFormState = {
@@ -37,6 +38,7 @@ const SchedeClienteTab: FC = () => {
   } = useOutletContext<DettaglioClienteContext>();
   const navigate = useNavigate();
   const userId = useRequiredUserId();
+  const { showToast } = useToast();
   const [schede, setSchede] = useState<Scheda[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -131,7 +133,7 @@ const SchedeClienteTab: FC = () => {
 
       if (new Date(dataFine).getTime() < new Date(dataInizio).getTime()) {
         throw new Error(
-          "La data fine non puo essere precedente alla data inizio",
+          "La data fine non può essere precedente alla data inizio",
         );
       }
 
@@ -144,6 +146,7 @@ const SchedeClienteTab: FC = () => {
       });
 
       await loadSchede();
+      showToast({ kind: "success", message: "Scheda creata con successo!" });
       setIsCreateModalOpen(false);
       setNewSchedaForm(initialSchedaFormState);
     } catch (error) {

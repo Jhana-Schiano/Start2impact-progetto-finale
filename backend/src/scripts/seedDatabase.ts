@@ -147,12 +147,6 @@ const seedDatabase = async (): Promise<void> => {
             quantita: 2,
             palestra_id: palestraId,
           },
-          {
-            nome: "Cable crossover",
-            anno: 2022,
-            quantita: 1,
-            palestra_id: palestraId,
-          },
         ],
         { transaction },
       );

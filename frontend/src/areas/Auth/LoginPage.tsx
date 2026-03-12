@@ -6,6 +6,7 @@ import {
   selectAuthState,
   selectIsAuthenticated,
 } from "../../store/authSlice";
+import { useToast } from "../../hooks";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 type LocationState = {
@@ -20,6 +21,7 @@ const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const { showToast } = useToast();
   const { isLoading, error } = useAppSelector(selectAuthState);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
@@ -53,6 +55,10 @@ const LoginPage: FC = () => {
     );
 
     if (loginUser.fulfilled.match(actionResult)) {
+      showToast({
+        kind: "success",
+        message: "Benvenuto! Login effettuato con successo.",
+      });
       navigate(redirectTo, { replace: true });
     }
   };
