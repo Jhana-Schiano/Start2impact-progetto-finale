@@ -6,6 +6,7 @@ import {
   allenamentiRoutes,
   eserciziRoutes,
   clientiRoutes,
+  palestraRoutes,
   schedeRoutes,
   utentiRoutes,
 } from "./routes/index.js";
@@ -21,6 +22,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use("/api/utenti", utentiRoutes);
 app.use("/api/clienti", clientiRoutes);
+app.use("/api/palestra", palestraRoutes);
 app.use("/api/schede", schedeRoutes);
 app.use("/api/allenamenti", allenamentiRoutes);
 app.use("/api/esercizi", eserciziRoutes);

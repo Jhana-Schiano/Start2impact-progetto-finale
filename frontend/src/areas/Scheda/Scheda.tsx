@@ -92,6 +92,7 @@ const Scheda: FC = () => {
   const [targetAllenamentoId, setTargetAllenamentoId] = useState<number | null>(
     null,
   );
+
   const [isEsercizioModalOpen, setIsEsercizioModalOpen] = useState(false);
   const [esercizioFormError, setEsercizioFormError] = useState<string | null>(
     null,

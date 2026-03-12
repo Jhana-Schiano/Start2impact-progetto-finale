@@ -3,8 +3,10 @@ import sequelize from "../config/database.js";
 
 // Import models so Sequelize registers every table before sync.
 import "../models/AllenamentoModels.js";
+import "../models/AttrezziModels.js";
 import "../models/ClienteModels.js";
 import "../models/EsercizioModels.js";
+import "../models/PalestraModels.js";
 import "../models/SchedaModels.js";
 import "../models/UtenteModel.js";
 
