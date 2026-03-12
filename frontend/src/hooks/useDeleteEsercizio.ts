@@ -2,36 +2,34 @@ import { useCallback, useState } from "react";
 import { deleteEsercizio as deleteEsercizioApi } from "../api/esercizi";
 
 const useDeleteEsercizio = () => {
-  const [isDeletingEsercizio, setIsDeletingEsercizio] = useState(false);
-  const [deleteEsercizioError, setDeleteEsercizioError] = useState<
-    string | null
-  >(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const clearDeleteEsercizioError = useCallback(() => {
-    setDeleteEsercizioError(null);
+  const clearSubmitError = useCallback(() => {
+    setSubmitError(null);
   }, []);
 
   const deleteEsercizio = useCallback(async (esercizioId: number) => {
     try {
-      setIsDeletingEsercizio(true);
-      setDeleteEsercizioError(null);
+      setIsSubmitting(true);
+      setSubmitError(null);
       await deleteEsercizioApi(esercizioId);
     } catch (error) {
-      setDeleteEsercizioError(
+      setSubmitError(
         error instanceof Error
           ? error.message
           : "Errore durante l'eliminazione esercizio",
       );
       throw error;
     } finally {
-      setIsDeletingEsercizio(false);
+      setIsSubmitting(false);
     }
   }, []);
 
   return {
-    isDeletingEsercizio,
-    deleteEsercizioError,
-    clearDeleteEsercizioError,
+    isSubmitting,
+    submitError,
+    clearSubmitError,
     deleteEsercizio,
   };
 };

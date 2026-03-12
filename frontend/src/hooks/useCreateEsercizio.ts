@@ -5,39 +5,37 @@ import {
 } from "../api/esercizi";
 
 const useCreateEsercizio = () => {
-  const [isCreatingEsercizio, setIsCreatingEsercizio] = useState(false);
-  const [createEsercizioError, setCreateEsercizioError] = useState<
-    string | null
-  >(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const clearCreateEsercizioError = useCallback(() => {
-    setCreateEsercizioError(null);
+  const clearSubmitError = useCallback(() => {
+    setSubmitError(null);
   }, []);
 
   const createEsercizio = useCallback(
     async (payload: CreateEsercizioInput): Promise<number> => {
       try {
-        setIsCreatingEsercizio(true);
-        setCreateEsercizioError(null);
+        setIsSubmitting(true);
+        setSubmitError(null);
         return await createEsercizioApi(payload);
       } catch (error) {
-        setCreateEsercizioError(
+        setSubmitError(
           error instanceof Error
             ? error.message
             : "Errore durante la creazione esercizio",
         );
         throw error;
       } finally {
-        setIsCreatingEsercizio(false);
+        setIsSubmitting(false);
       }
     },
     [],
   );
 
   return {
-    isCreatingEsercizio,
-    createEsercizioError,
-    clearCreateEsercizioError,
+    isSubmitting,
+    submitError,
+    clearSubmitError,
     createEsercizio,
   };
 };

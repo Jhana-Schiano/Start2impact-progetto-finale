@@ -5,39 +5,37 @@ import {
 } from "../api/allenamenti";
 
 const useCreateAllenamento = () => {
-  const [isCreatingAllenamento, setIsCreatingAllenamento] = useState(false);
-  const [createAllenamentoError, setCreateAllenamentoError] = useState<
-    string | null
-  >(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const clearCreateAllenamentoError = useCallback(() => {
-    setCreateAllenamentoError(null);
+  const clearSubmitError = useCallback(() => {
+    setSubmitError(null);
   }, []);
 
   const createAllenamento = useCallback(
     async (payload: CreateAllenamentoInput): Promise<number> => {
       try {
-        setIsCreatingAllenamento(true);
-        setCreateAllenamentoError(null);
+        setIsSubmitting(true);
+        setSubmitError(null);
         return await createAllenamentoApi(payload);
       } catch (error) {
-        setCreateAllenamentoError(
+        setSubmitError(
           error instanceof Error
             ? error.message
             : "Errore durante la creazione allenamento",
         );
         throw error;
       } finally {
-        setIsCreatingAllenamento(false);
+        setIsSubmitting(false);
       }
     },
     [],
   );
 
   return {
-    isCreatingAllenamento,
-    createAllenamentoError,
-    clearCreateAllenamentoError,
+    isSubmitting,
+    submitError,
+    clearSubmitError,
     createAllenamento,
   };
 };

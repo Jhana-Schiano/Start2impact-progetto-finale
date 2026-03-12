@@ -13,7 +13,7 @@ type NewEsercizioFormState = {
 type NewEsercizioModalProps = {
   isOpen: boolean;
   isSubmitting: boolean;
-  error: string | null;
+  submitError: string | null;
   formState: NewEsercizioFormState;
   onChange: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -25,7 +25,7 @@ type NewEsercizioModalProps = {
 const NewEsercizioModal: FC<NewEsercizioModalProps> = ({
   isOpen,
   isSubmitting,
-  error,
+  submitError,
   formState,
   onChange,
   onSubmit,
@@ -126,7 +126,9 @@ const NewEsercizioModal: FC<NewEsercizioModalProps> = ({
           />
         </label>
 
-        {error && <p className="error-text modal-field--full">{error}</p>}
+        {submitError && (
+          <p className="error-text modal-field--full">{submitError}</p>
+        )}
 
         <div className="modal-actions">
           <button

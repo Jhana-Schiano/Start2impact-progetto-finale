@@ -60,23 +60,23 @@ const Scheda: FC = () => {
   } = useSchedaData({ clienteIdParam: id, schedaIdParam: schedaId });
 
   const {
-    isCreatingAllenamento,
-    createAllenamentoError,
-    clearCreateAllenamentoError,
+    isSubmitting: isSubmittingAllenamento,
+    submitError: submitErrorAllenamento,
+    clearSubmitError: clearAllenamentoSubmitError,
     createAllenamento,
   } = useCreateAllenamento();
 
   const {
-    isCreatingEsercizio,
-    createEsercizioError,
-    clearCreateEsercizioError,
+    isSubmitting: isSubmittingEsercizio,
+    submitError: submitErrorEsercizio,
+    clearSubmitError: clearEsercizioSubmitError,
     createEsercizio,
   } = useCreateEsercizio();
 
   const {
-    isDeletingEsercizio,
-    deleteEsercizioError,
-    clearDeleteEsercizioError,
+    isSubmitting: isSubmittingDeleteEsercizio,
+    submitError: submitErrorDeleteEsercizio,
+    clearSubmitError: clearDeleteSubmitError,
     deleteEsercizio,
   } = useDeleteEsercizio();
 
@@ -84,7 +84,7 @@ const Scheda: FC = () => {
     number | null
   >(null);
   const [isAllenamentoModalOpen, setIsAllenamentoModalOpen] = useState(false);
-  const [allenamentoFormError, setAllenamentoFormError] = useState<
+  const [allenamentoSubmitError, setAllenamentoSubmitError] = useState<
     string | null
   >(null);
   const [newAllenamentoForm, setNewAllenamentoForm] =
@@ -94,9 +94,9 @@ const Scheda: FC = () => {
   );
 
   const [isEsercizioModalOpen, setIsEsercizioModalOpen] = useState(false);
-  const [esercizioFormError, setEsercizioFormError] = useState<string | null>(
-    null,
-  );
+  const [esercizioSubmitError, setEsercizioSubmitError] = useState<
+    string | null
+  >(null);
   const [newEsercizioForm, setNewEsercizioForm] =
     useState<NewEsercizioFormState>(initialNewEsercizioFormState);
 
@@ -133,8 +133,8 @@ const Scheda: FC = () => {
   };
 
   const openAllenamentoModal = () => {
-    clearCreateAllenamentoError();
-    setAllenamentoFormError(null);
+    clearAllenamentoSubmitError();
+    setAllenamentoSubmitError(null);
     setNewAllenamentoForm(initialNewAllenamentoFormState);
     setIsAllenamentoModalOpen(true);
   };
@@ -156,18 +156,20 @@ const Scheda: FC = () => {
     event: SyntheticEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
-    setAllenamentoFormError(null);
+    setAllenamentoSubmitError(null);
 
     const durata = Number(newAllenamentoForm.durataStimata);
     const aree = newAllenamentoForm.areeCoinvolte.trim();
 
     if (!Number.isFinite(durata) || durata <= 0) {
-      setAllenamentoFormError("Durata deve essere un numero maggiore di zero");
+      setAllenamentoSubmitError(
+        "Durata deve essere un numero maggiore di zero",
+      );
       return;
     }
 
     if (aree === "") {
-      setAllenamentoFormError("Aree coinvolte è obbligatorio");
+      setAllenamentoSubmitError("Aree coinvolte è obbligatorio");
       return;
     }
 
@@ -185,8 +187,8 @@ const Scheda: FC = () => {
 
   const openEsercizioModal = (allenamentoId: number) => {
     setTargetAllenamentoId(allenamentoId);
-    clearCreateEsercizioError();
-    setEsercizioFormError(null);
+    clearEsercizioSubmitError();
+    setEsercizioSubmitError(null);
     setNewEsercizioForm(initialNewEsercizioFormState);
     setIsEsercizioModalOpen(true);
   };
@@ -206,10 +208,10 @@ const Scheda: FC = () => {
     event: SyntheticEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
-    setEsercizioFormError(null);
+    setEsercizioSubmitError(null);
 
     if (!targetAllenamentoId) {
-      setEsercizioFormError("Allenamento non valido");
+      setEsercizioSubmitError("Allenamento non valido");
       return;
     }
 
@@ -223,7 +225,7 @@ const Scheda: FC = () => {
     const volume = rawVolume === "" ? null : Number(rawVolume);
 
     if (nome === "") {
-      setEsercizioFormError("Nome e obbligatorio");
+      setEsercizioSubmitError("Nome e obbligatorio");
       return;
     }
 
@@ -235,14 +237,14 @@ const Scheda: FC = () => {
       ripetizioni <= 0 ||
       riposo <= 0
     ) {
-      setEsercizioFormError(
+      setEsercizioSubmitError(
         "Numero serie, ripetizioni e riposo devono essere maggiori di zero",
       );
       return;
     }
 
     if (volume !== null && (!Number.isFinite(volume) || volume <= 0)) {
-      setEsercizioFormError(
+      setEsercizioSubmitError(
         "Volume deve essere maggiore di zero quando valorizzato",
       );
       return;
@@ -265,7 +267,7 @@ const Scheda: FC = () => {
   };
 
   const handleDeleteEsercizio = async (esercizioId: number) => {
-    clearDeleteEsercizioError();
+    clearDeleteSubmitError();
     await deleteEsercizio(esercizioId);
     await reload();
   };
@@ -359,7 +361,7 @@ const Scheda: FC = () => {
                                     className="scheda-delete-ex-btn"
                                     aria-label={`Elimina esercizio ${esercizio.nome}`}
                                     title="Elimina esercizio"
-                                    disabled={isDeletingEsercizio}
+                                    disabled={isSubmittingDeleteEsercizio}
                                     onClick={() =>
                                       handleDeleteEsercizio(esercizio.id)
                                     }
@@ -374,8 +376,8 @@ const Scheda: FC = () => {
                       </div>
                     )}
 
-                    {deleteEsercizioError && (
-                      <ErrorState message={deleteEsercizioError} />
+                    {submitErrorDeleteEsercizio && (
+                      <ErrorState message={submitErrorDeleteEsercizio} />
                     )}
 
                     <div className="scheda-allenamento-actions">
@@ -397,8 +399,8 @@ const Scheda: FC = () => {
 
       <NewAllenamentoModal
         isOpen={isAllenamentoModalOpen}
-        isSubmitting={isCreatingAllenamento}
-        error={allenamentoFormError ?? createAllenamentoError}
+        isSubmitting={isSubmittingAllenamento}
+        submitError={allenamentoSubmitError ?? submitErrorAllenamento}
         formState={newAllenamentoForm}
         onChange={handleAllenamentoFieldChange}
         onSubmit={handleCreateAllenamento}
@@ -407,8 +409,8 @@ const Scheda: FC = () => {
 
       <NewEsercizioModal
         isOpen={isEsercizioModalOpen}
-        isSubmitting={isCreatingEsercizio}
-        error={esercizioFormError ?? createEsercizioError}
+        isSubmitting={isSubmittingEsercizio}
+        submitError={esercizioSubmitError ?? submitErrorEsercizio}
         formState={newEsercizioForm}
         onChange={handleEsercizioFieldChange}
         onSubmit={handleCreateEsercizio}

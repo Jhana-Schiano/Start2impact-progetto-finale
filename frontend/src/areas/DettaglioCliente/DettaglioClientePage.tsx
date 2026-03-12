@@ -9,8 +9,8 @@ const CLIENTE_ERROR_MESSAGE = "Impossibile caricare il cliente";
 export type DettaglioClienteContext = {
   clienteId: number;
   cliente: ClienteDettaglio | null;
-  isLoadingCliente: boolean;
-  errorCliente: string | null;
+  isLoading: boolean;
+  error: string | null;
   reloadCliente: () => Promise<void>;
 };
 
@@ -18,27 +18,27 @@ const DettaglioClientePage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const clienteId = Number(id);
   const [cliente, setCliente] = useState<ClienteDettaglio | null>(null);
-  const [isLoadingCliente, setIsLoadingCliente] = useState(true);
-  const [errorCliente, setErrorCliente] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const loadCliente = useCallback(async () => {
     if (!Number.isInteger(clienteId) || clienteId <= 0) {
       setCliente(null);
-      setErrorCliente(CLIENTE_ERROR_MESSAGE);
-      setIsLoadingCliente(false);
+      setError(CLIENTE_ERROR_MESSAGE);
+      setIsLoading(false);
       return;
     }
 
     try {
-      setIsLoadingCliente(true);
-      setErrorCliente(null);
+      setIsLoading(true);
+      setError(null);
       const response = await getClienteById(clienteId);
       setCliente(response);
     } catch {
       setCliente(null);
-      setErrorCliente(CLIENTE_ERROR_MESSAGE);
+      setError(CLIENTE_ERROR_MESSAGE);
     } finally {
-      setIsLoadingCliente(false);
+      setIsLoading(false);
     }
   }, [clienteId]);
 
@@ -46,9 +46,9 @@ const DettaglioClientePage: FC = () => {
     loadCliente();
   }, [loadCliente]);
 
-  const clienteTitolo = isLoadingCliente
+  const clienteTitolo = isLoading
     ? "Caricamento cliente..."
-    : errorCliente
+    : error
       ? "Cliente non disponibile"
       : cliente
         ? `${cliente.id} - ${cliente.nome} ${cliente.cognome} (${cliente.sesso}) ${new Date(cliente.dataNascita).toLocaleDateString("it-IT")}`
@@ -63,7 +63,7 @@ const DettaglioClientePage: FC = () => {
         </div>
       </header>
 
-      {!errorCliente && (
+      {!error && (
         <nav className="detail-tabs" aria-label="Navigazione dettaglio cliente">
           <NavLink
             to="dati"
@@ -85,15 +85,15 @@ const DettaglioClientePage: FC = () => {
       )}
 
       <div className="detail-content">
-        {errorCliente ? (
-          <ErrorState message={errorCliente} className="detail-placeholder" />
+        {error ? (
+          <ErrorState message={error} className="detail-placeholder" />
         ) : (
           <Outlet
             context={{
               clienteId,
               cliente,
-              isLoadingCliente,
-              errorCliente,
+              isLoading,
+              error,
               reloadCliente: loadCliente,
             }}
           />

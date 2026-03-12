@@ -25,43 +25,43 @@ const formatAddress = (
 };
 
 const DatiClienteTab: FC = () => {
-  const { cliente, clienteId, isLoadingCliente, errorCliente, reloadCliente } =
+  const { cliente, clienteId, isLoading, error, reloadCliente } =
     useOutletContext<DettaglioClienteContext>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  if (isLoadingCliente) {
+  if (isLoading) {
     return <p className="muted">Caricamento dati cliente...</p>;
   }
 
-  if (errorCliente || !cliente) {
+  if (error || !cliente) {
     return <ErrorState message="Impossibile mostrare i dati cliente." />;
   }
 
   const handleSave = async (payload: UpdateClienteInput) => {
     try {
-      setIsSaving(true);
-      setSaveError(null);
+      setIsSubmitting(true);
+      setSubmitError(null);
 
       await updateCliente(clienteId, payload);
       await reloadCliente();
       setIsEditModalOpen(false);
     } catch (error) {
-      setSaveError(
+      setSubmitError(
         error instanceof Error
           ? error.message
           : "Errore durante il salvataggio",
       );
     } finally {
-      setIsSaving(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
     <>
-      {saveError && (
-        <ErrorState message={saveError} className="detail-save-error" />
+      {submitError && (
+        <ErrorState message={submitError} className="detail-save-error" />
       )}
 
       <dl className="detail-grid">
@@ -130,7 +130,7 @@ const DatiClienteTab: FC = () => {
         <PrimaryButton
           type="button"
           onClick={() => {
-            setSaveError(null);
+            setSubmitError(null);
             setIsEditModalOpen(true);
           }}
         >
@@ -141,12 +141,12 @@ const DatiClienteTab: FC = () => {
       {isEditModalOpen && (
         <EditClienteModal
           isOpen={isEditModalOpen}
-          isSubmitting={isSaving}
-          submitError={saveError}
+          isSubmitting={isSubmitting}
+          submitError={submitError}
           cliente={cliente}
           onClose={() => {
-            if (!isSaving) {
-              setSaveError(null);
+            if (!isSubmitting) {
+              setSubmitError(null);
               setIsEditModalOpen(false);
             }
           }}

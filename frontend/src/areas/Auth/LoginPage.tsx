@@ -15,7 +15,7 @@ type LocationState = {
 const LoginPage: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [formError, setFormError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -39,11 +39,11 @@ const LoginPage: FC = () => {
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail || !password) {
-      setFormError("Email e password sono obbligatorie");
+      setSubmitError("Email e password sono obbligatorie");
       return;
     }
 
-    setFormError(null);
+    setSubmitError(null);
 
     const actionResult = await dispatch(
       loginUser({
@@ -86,8 +86,8 @@ const LoginPage: FC = () => {
             />
           </label>
 
-          {(formError || error) && (
-            <p className="error-text">{formError ?? error}</p>
+          {(submitError || error) && (
+            <p className="error-text">{submitError ?? error}</p>
           )}
 
           <div className="auth-actions">

@@ -17,7 +17,7 @@ export interface initialNewAllenamentoFormState extends NewAllenamentoFormState 
 type NewAllenamentoModalProps = {
   isOpen: boolean;
   isSubmitting: boolean;
-  error: string | null;
+  submitError: string | null;
   formState: NewAllenamentoFormState;
   onChange: (
     event: ChangeEvent<
@@ -31,7 +31,7 @@ type NewAllenamentoModalProps = {
 const NewAllenamentoModal: FC<NewAllenamentoModalProps> = ({
   isOpen,
   isSubmitting,
-  error,
+  submitError,
   formState,
   onChange,
   onSubmit,
@@ -100,7 +100,7 @@ const NewAllenamentoModal: FC<NewAllenamentoModalProps> = ({
           />
         </label>
 
-        {error && <p className="error-text">{error}</p>}
+        {submitError && <p className="error-text">{submitError}</p>}
 
         <div className="modal-actions">
           <button

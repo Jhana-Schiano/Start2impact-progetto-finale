@@ -27,8 +27,8 @@ const ProfiloPage: FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [draftEmail, setDraftEmail] = useState("");
   const [draftTelefono, setDraftTelefono] = useState("");
-  const [isSavingContacts, setIsSavingContacts] = useState(false);
-  const [editError, setEditError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const loadProfilo = useCallback(async () => {
     if (!userId) {
@@ -92,7 +92,7 @@ const ProfiloPage: FC = () => {
 
     setDraftEmail(utente.email);
     setDraftTelefono(utente.telefono ?? "");
-    setEditError(null);
+    setSubmitError(null);
     setIsEditModalOpen(true);
   };
 
@@ -108,12 +108,12 @@ const ProfiloPage: FC = () => {
   };
 
   const handleCloseEditModal = () => {
-    if (isSavingContacts) {
+    if (isSubmitting) {
       return;
     }
 
     setIsEditModalOpen(false);
-    setEditError(null);
+    setSubmitError(null);
   };
 
   const handleSubmitContacts = async (
@@ -125,18 +125,18 @@ const ProfiloPage: FC = () => {
     const trimmedTelefono = draftTelefono.trim();
 
     if (!trimmedEmail && !trimmedTelefono) {
-      setEditError("Inserisci almeno email o telefono");
+      setSubmitError("Inserisci almeno email o telefono");
       return;
     }
 
     try {
       if (!userId) {
-        setEditError("Sessione non valida, effettua di nuovo il login");
+        setSubmitError("Sessione non valida, effettua di nuovo il login");
         return;
       }
 
-      setIsSavingContacts(true);
-      setEditError(null);
+      setIsSubmitting(true);
+      setSubmitError(null);
 
       await updateUtenteContatti(userId, {
         email: trimmedEmail || undefined,
@@ -146,9 +146,9 @@ const ProfiloPage: FC = () => {
       await loadProfilo();
       setIsEditModalOpen(false);
     } catch (err) {
-      setEditError(err instanceof Error ? err.message : "Errore imprevisto");
+      setSubmitError(err instanceof Error ? err.message : "Errore imprevisto");
     } finally {
-      setIsSavingContacts(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -211,7 +211,7 @@ const ProfiloPage: FC = () => {
                 type="button"
                 className="btn btn--ghost"
                 onClick={handleCloseEditModal}
-                disabled={isSavingContacts}
+                disabled={isSubmitting}
               >
                 Chiudi
               </button>
@@ -228,7 +228,7 @@ const ProfiloPage: FC = () => {
                   type="email"
                   value={draftEmail}
                   onChange={handleChange}
-                  disabled={isSavingContacts}
+                  disabled={isSubmitting}
                 />
               </label>
 
@@ -239,27 +239,23 @@ const ProfiloPage: FC = () => {
                   type="text"
                   value={draftTelefono}
                   onChange={handleChange}
-                  disabled={isSavingContacts}
+                  disabled={isSubmitting}
                 />
               </label>
 
-              {editError && <p className="error-text">{editError}</p>}
+              {submitError && <p className="error-text">{submitError}</p>}
 
               <div className="profilo-modal-actions">
                 <button
                   type="button"
                   className="btn btn--ghost"
                   onClick={handleCloseEditModal}
-                  disabled={isSavingContacts}
+                  disabled={isSubmitting}
                 >
                   Annulla
                 </button>
-                <button
-                  type="submit"
-                  className="btn"
-                  disabled={isSavingContacts}
-                >
-                  {isSavingContacts ? "Salvataggio..." : "Salva"}
+                <button type="submit" className="btn" disabled={isSubmitting}>
+                  {isSubmitting ? "Salvataggio..." : "Salva"}
                 </button>
               </div>
             </form>

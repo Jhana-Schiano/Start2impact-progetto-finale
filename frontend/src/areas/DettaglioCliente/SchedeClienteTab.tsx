@@ -30,45 +30,48 @@ const initialSchedaFormState: NewSchedaFormState = {
 };
 
 const SchedeClienteTab: FC = () => {
-  const { clienteId, errorCliente, isLoadingCliente } =
-    useOutletContext<DettaglioClienteContext>();
+  const {
+    clienteId,
+    error: parentError,
+    isLoading: isParentLoading,
+  } = useOutletContext<DettaglioClienteContext>();
   const navigate = useNavigate();
   const userId = useRequiredUserId();
   const [schede, setSchede] = useState<Scheda[]>([]);
-  const [isLoadingSchede, setIsLoadingSchede] = useState(true);
-  const [errorSchede, setErrorSchede] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isCreatingScheda, setIsCreatingScheda] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [newSchedaForm, setNewSchedaForm] = useState<NewSchedaFormState>(
     initialSchedaFormState,
   );
 
   const loadSchede = useCallback(async () => {
     try {
-      setIsLoadingSchede(true);
+      setIsLoading(true);
       const response = await getSchedeByClienteId(clienteId);
       setSchede(response);
-      setErrorSchede(null);
+      setError(null);
     } catch (error) {
-      setErrorSchede(
+      setError(
         error instanceof Error
           ? error.message
           : "Errore nel caricamento schede cliente",
       );
     } finally {
-      setIsLoadingSchede(false);
+      setIsLoading(false);
     }
   }, [clienteId]);
 
   useEffect(() => {
-    if (isLoadingCliente || errorCliente) {
-      setIsLoadingSchede(false);
+    if (isParentLoading || parentError) {
+      setIsLoading(false);
       return;
     }
 
     loadSchede();
-  }, [errorCliente, isLoadingCliente, loadSchede]);
+  }, [isParentLoading, parentError, loadSchede]);
 
   const sortedSchede = useMemo(
     () =>
@@ -79,20 +82,20 @@ const SchedeClienteTab: FC = () => {
     [schede],
   );
 
-  if (isLoadingCliente || isLoadingSchede) {
+  if (isParentLoading || isLoading) {
     return <p className="muted">Caricamento schede...</p>;
   }
 
-  if (errorCliente) {
+  if (parentError) {
     return <ErrorState message="Impossibile mostrare le schede cliente." />;
   }
 
-  if (errorSchede) {
-    return <ErrorState message={errorSchede} />;
+  if (error) {
+    return <ErrorState message={error} />;
   }
 
   const handleOpenCreateModal = () => {
-    setCreateError(null);
+    setSubmitError(null);
     setNewSchedaForm(initialSchedaFormState);
     setIsCreateModalOpen(true);
   };
@@ -112,8 +115,8 @@ const SchedeClienteTab: FC = () => {
     event.preventDefault();
 
     try {
-      setIsCreatingScheda(true);
-      setCreateError(null);
+      setIsSubmitting(true);
+      setSubmitError(null);
 
       if (!userId) {
         throw new Error("Utente non autenticato. Effettua di nuovo il login.");
@@ -144,18 +147,18 @@ const SchedeClienteTab: FC = () => {
       setIsCreateModalOpen(false);
       setNewSchedaForm(initialSchedaFormState);
     } catch (error) {
-      setCreateError(
+      setSubmitError(
         error instanceof Error
           ? error.message
           : "Errore durante la creazione della scheda",
       );
     } finally {
-      setIsCreatingScheda(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleCloseCreateModal = () => {
-    if (!isCreatingScheda) {
+    if (!isSubmitting) {
       setIsCreateModalOpen(false);
     }
   };
@@ -219,8 +222,8 @@ const SchedeClienteTab: FC = () => {
       <ModalBase
         isOpen={isCreateModalOpen}
         onClose={handleCloseCreateModal}
-        closeOnEscape={!isCreatingScheda}
-        closeOnOverlayClick={!isCreatingScheda}
+        closeOnEscape={!isSubmitting}
+        closeOnOverlayClick={!isSubmitting}
         ariaLabelledBy="new-scheda-title"
       >
         <div className="modal-header">
@@ -231,7 +234,7 @@ const SchedeClienteTab: FC = () => {
             type="button"
             className="btn btn--ghost"
             onClick={handleCloseCreateModal}
-            disabled={isCreatingScheda}
+            disabled={isSubmitting}
           >
             Chiudi
           </button>
@@ -271,19 +274,19 @@ const SchedeClienteTab: FC = () => {
             />
           </label>
 
-          {createError && <p className="error-text">{createError}</p>}
+          {submitError && <p className="error-text">{submitError}</p>}
 
           <div className="modal-actions">
             <button
               type="button"
               className="btn btn--ghost"
               onClick={handleCloseCreateModal}
-              disabled={isCreatingScheda}
+              disabled={isSubmitting}
             >
               Annulla
             </button>
-            <button type="submit" className="btn" disabled={isCreatingScheda}>
-              {isCreatingScheda ? "Salvataggio..." : "Crea scheda"}
+            <button type="submit" className="btn" disabled={isSubmitting}>
+              {isSubmitting ? "Salvataggio..." : "Crea scheda"}
             </button>
           </div>
         </form>
