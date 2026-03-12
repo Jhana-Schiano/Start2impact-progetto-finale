@@ -115,6 +115,8 @@
 
 .menu-content {
 	padding: 28px;
+	min-height: 0;
+	overflow-y: auto;
 }
 
 @media (max-width: 860px) {

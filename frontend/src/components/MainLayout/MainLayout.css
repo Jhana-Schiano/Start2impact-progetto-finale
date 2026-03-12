@@ -3,15 +3,17 @@
 }
 
 .layout-shell {
-	min-height: 100dvh;
+	height: 100dvh;
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
 }
 
 .layout-content {
 	flex: 1;
 	min-height: 0;
 	display: flex;
+	overflow: hidden;
 }
 
 .app-header {
