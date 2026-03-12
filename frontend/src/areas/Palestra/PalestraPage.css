@@ -1,0 +1,62 @@
+.palestra-section {
+  display: grid;
+  gap: 18px;
+  height: 100%;
+}
+
+.palestra-header {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.palestra-title {
+  margin: 0;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  line-height: 1.2;
+}
+
+.palestra-address {
+  margin: 0;
+}
+
+.palestra-header .muted {
+  margin: 0;
+}
+
+.palestra-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-1);
+}
+
+.palestra-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+.palestra-table th,
+.palestra-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.palestra-table th {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink-1);
+  background: #f6f9fc;
+}
+
+.palestra-table tbody tr:hover {
+  background: #f7fbff;
+}
+
+.palestra-table tbody tr:last-child td {
+  border-bottom: 0;
+}

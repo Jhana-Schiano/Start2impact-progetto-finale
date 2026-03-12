@@ -30,8 +30,9 @@ header e layout dovrebbero avere lo stesso colore/profondità? (header sembra tr
 --> per la tabella usa un operatore ternario sul numero di clienti per mostrare la tabella oppure un component di error
 
 appunti 
-
-
+lo store dovrebbe anche salvare lo userId?
+per poi usare quello per capire se l'utente è loggato o meno visto che c'è il logout
+potrebbe anche controllare che esista nel db 
 
 
 
