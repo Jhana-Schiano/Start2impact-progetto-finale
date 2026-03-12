@@ -30,7 +30,5 @@ potrebbe anche controllare che esista nel db
 
 
 
-1. paginazione clienti
-2. gestione errori 
-3. gestione is loading 
+3. gestione is loading -> crea un component e vedi se conviene metterlo in redux (così fai comparire una rotellina al posto di tutta la pagina, vedi se semplifica il codice)
 4. messaggi di feedback tramite toast 

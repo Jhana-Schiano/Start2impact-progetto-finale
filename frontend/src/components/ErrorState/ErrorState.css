@@ -1,0 +1,18 @@
+.error-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  text-align: center;
+  color: #c33131;
+}
+
+.error-state-icon {
+  font-size: 1.7rem;
+}
+
+.error-state-message {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.35;
+}

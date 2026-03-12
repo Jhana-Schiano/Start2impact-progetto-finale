@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState, type FC } from "react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { getClienteById, type ClienteDettaglio } from "../../api/clienti";
-import { BackButton } from "../../components/Index";
+import { BackButton, ErrorState } from "../../components/Index";
 import "./DettaglioClientePage.css";
+
+const CLIENTE_ERROR_MESSAGE = "Impossibile caricare il cliente";
 
 export type DettaglioClienteContext = {
   clienteId: number;
@@ -21,22 +23,20 @@ const DettaglioClientePage: FC = () => {
 
   const loadCliente = useCallback(async () => {
     if (!Number.isInteger(clienteId) || clienteId <= 0) {
-      setErrorCliente("Id cliente non valido");
+      setCliente(null);
+      setErrorCliente(CLIENTE_ERROR_MESSAGE);
       setIsLoadingCliente(false);
       return;
     }
 
     try {
       setIsLoadingCliente(true);
+      setErrorCliente(null);
       const response = await getClienteById(clienteId);
       setCliente(response);
-      setErrorCliente(null);
-    } catch (error) {
-      setErrorCliente(
-        error instanceof Error
-          ? error.message
-          : "Errore nel caricamento cliente",
-      );
+    } catch {
+      setCliente(null);
+      setErrorCliente(CLIENTE_ERROR_MESSAGE);
     } finally {
       setIsLoadingCliente(false);
     }
@@ -48,9 +48,11 @@ const DettaglioClientePage: FC = () => {
 
   const clienteTitolo = isLoadingCliente
     ? "Caricamento cliente..."
-    : cliente
-      ? `${cliente.id} - ${cliente.nome} ${cliente.cognome} (${cliente.sesso}) ${new Date(cliente.dataNascita).toLocaleDateString("it-IT")}`
-      : "Cliente";
+    : errorCliente
+      ? "Cliente non disponibile"
+      : cliente
+        ? `${cliente.id} - ${cliente.nome} ${cliente.cognome} (${cliente.sesso}) ${new Date(cliente.dataNascita).toLocaleDateString("it-IT")}`
+        : "Cliente";
 
   return (
     <section className="panel detail-page reveal">
@@ -59,38 +61,43 @@ const DettaglioClientePage: FC = () => {
           <BackButton to="/clienti" />
           <h1 className="section-title">{clienteTitolo}</h1>
         </div>
-        {errorCliente && <p className="error-text">{errorCliente}</p>}
       </header>
 
-      <nav className="detail-tabs" aria-label="Navigazione dettaglio cliente">
-        <NavLink
-          to="dati"
-          className={({ isActive }) =>
-            `detail-tab${isActive ? " detail-tab-active" : ""}`
-          }
-        >
-          Dati
-        </NavLink>
-        <NavLink
-          to="schede"
-          className={({ isActive }) =>
-            `detail-tab${isActive ? " detail-tab-active" : ""}`
-          }
-        >
-          Schede
-        </NavLink>
-      </nav>
+      {!errorCliente && (
+        <nav className="detail-tabs" aria-label="Navigazione dettaglio cliente">
+          <NavLink
+            to="dati"
+            className={({ isActive }) =>
+              `detail-tab${isActive ? " detail-tab-active" : ""}`
+            }
+          >
+            Dati
+          </NavLink>
+          <NavLink
+            to="schede"
+            className={({ isActive }) =>
+              `detail-tab${isActive ? " detail-tab-active" : ""}`
+            }
+          >
+            Schede
+          </NavLink>
+        </nav>
+      )}
 
       <div className="detail-content">
-        <Outlet
-          context={{
-            clienteId,
-            cliente,
-            isLoadingCliente,
-            errorCliente,
-            reloadCliente: loadCliente,
-          }}
-        />
+        {errorCliente ? (
+          <ErrorState message={errorCliente} className="detail-placeholder" />
+        ) : (
+          <Outlet
+            context={{
+              clienteId,
+              cliente,
+              isLoadingCliente,
+              errorCliente,
+              reloadCliente: loadCliente,
+            }}
+          />
+        )}
       </div>
     </section>
   );

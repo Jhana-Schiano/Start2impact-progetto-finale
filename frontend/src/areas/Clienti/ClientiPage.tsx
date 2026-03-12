@@ -8,7 +8,7 @@ import {
   type Cliente,
   type CreateClienteInput,
 } from "../../api/clienti";
-import { PrimaryButton } from "../../components/Index";
+import { ErrorState, PrimaryButton } from "../../components/Index";
 import CreateClienteModal from "./CreateClienteModal";
 import "./ClientiPage.css";
 
@@ -46,7 +46,6 @@ const ClientiPage: FC = () => {
       });
       setError(null);
     } catch (err) {
-      //TODO: Mostrare il messaggio di errore, ma anche una icona o qualcosa di più visibile e centrato(component ad hoc)
       setError(err instanceof Error ? err.message : "Errore imprevisto");
     } finally {
       setIsLoading(false);
@@ -164,7 +163,7 @@ const ClientiPage: FC = () => {
         </footer>
       )}
 
-      {error && <p className="muted">{error}</p>}
+      {error && <ErrorState message={error} />}
       {isModalOpen && (
         <CreateClienteModal
           isOpen={isModalOpen}

@@ -13,7 +13,7 @@ import {
   getSchedeByClienteId,
   type Scheda,
 } from "../../api/schede";
-import { ModalBase, PrimaryButton } from "../../components/Index";
+import { ErrorState, ModalBase, PrimaryButton } from "../../components/Index";
 import { useAppSelector } from "../../store/hooks";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 
@@ -84,13 +84,11 @@ const SchedeClienteTab: FC = () => {
   }
 
   if (errorCliente) {
-    return (
-      <p className="error-text">Impossibile mostrare le schede cliente.</p>
-    );
+    return <ErrorState message="Impossibile mostrare le schede cliente." />;
   }
 
   if (errorSchede) {
-    return <p className="error-text">{errorSchede}</p>;
+    return <ErrorState message={errorSchede} />;
   }
 
   const handleOpenCreateModal = () => {

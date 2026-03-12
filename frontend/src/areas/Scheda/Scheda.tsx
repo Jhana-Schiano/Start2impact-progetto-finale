@@ -7,7 +7,7 @@ import {
 import { HiTrash } from "react-icons/hi2";
 import { useParams } from "react-router-dom";
 import { ALLENAMENTO_GIORNI } from "../../api/allenamenti";
-import { BackButton, PrimaryButton } from "../../components/Index";
+import { BackButton, ErrorState, PrimaryButton } from "../../components/Index";
 import NewAllenamentoModal from "./NewAllenamentoModal";
 import NewEsercizioModal from "./NewEsercizioModal";
 import {
@@ -119,9 +119,7 @@ const Scheda: FC = () => {
   if (error || !scheda) {
     return (
       <section className="panel reveal">
-        <p className="error-text">
-          {error ?? "Impossibile mostrare la scheda."}
-        </p>
+        <ErrorState message={error ?? "Impossibile mostrare la scheda."} />
       </section>
     );
   }
@@ -377,7 +375,7 @@ const Scheda: FC = () => {
                     )}
 
                     {deleteEsercizioError && (
-                      <p className="error-text">{deleteEsercizioError}</p>
+                      <ErrorState message={deleteEsercizioError} />
                     )}
 
                     <div className="scheda-allenamento-actions">

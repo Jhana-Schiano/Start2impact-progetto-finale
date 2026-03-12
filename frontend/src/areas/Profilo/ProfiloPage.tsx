@@ -14,7 +14,7 @@ import {
   updateUtenteContatti,
   type Utente,
 } from "../../api/utenti";
-import { PrimaryButton } from "../../components/Index";
+import { ErrorState, PrimaryButton } from "../../components/Index";
 import { logout } from "../../store/authSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import "./ProfiloPage.css";
@@ -168,7 +168,7 @@ const ProfiloPage: FC = () => {
       </header>
 
       {isLoading && <p className="muted">Caricamento profilo...</p>}
-      {error && <p className="muted">{error}</p>}
+      {error && <ErrorState message={error} />}
 
       {!isLoading && !error && utente && (
         <div className="profilo-grid" aria-label="Dati profilo utente">
@@ -250,7 +250,7 @@ const ProfiloPage: FC = () => {
                 />
               </label>
 
-              {editError && <p className="muted">{editError}</p>}
+              {editError && <p className="error-text">{editError}</p>}
 
               <div className="profilo-modal-actions">
                 <button

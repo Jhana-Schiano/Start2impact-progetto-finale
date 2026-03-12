@@ -1,5 +1,6 @@
 import { useEffect, useState, type FC } from "react";
 import { getPalestraDati, type PalestraDati } from "../../api/palestra";
+import { ErrorState } from "../../components/Index";
 import "./PalestraPage.css";
 
 const PALESTRA_ID = Number(import.meta.env.VITE_PALESTRA_ID ?? 1);
@@ -29,7 +30,7 @@ const PalestraPage: FC = () => {
   return (
     <section className="panel palestra-section reveal">
       {isLoading && <p className="muted">Caricamento dati palestra...</p>}
-      {error && <p className="muted">{error}</p>}
+      {error && <ErrorState message={error} />}
 
       {!isLoading && !error && datiPalestra && (
         <>

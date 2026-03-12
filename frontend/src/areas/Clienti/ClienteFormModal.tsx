@@ -428,7 +428,7 @@ const ClienteFormModal: FC<ClienteFormModalProps> = ({
           </>
         )}
 
-        {submitError && <p className="muted">{submitError}</p>}
+        {submitError && <p className="error-text">{submitError}</p>}
 
         <div className="modal-actions">
           {mode === "create" && step === 2 && (

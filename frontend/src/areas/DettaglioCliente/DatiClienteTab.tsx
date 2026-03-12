@@ -1,7 +1,7 @@
 import { useState, type FC } from "react";
 import { useOutletContext } from "react-router-dom";
 import { updateCliente, type UpdateClienteInput } from "../../api/clienti";
-import { PrimaryButton } from "../../components/Index";
+import { ErrorState, PrimaryButton } from "../../components/Index";
 import type { DettaglioClienteContext } from "./DettaglioClientePage";
 import EditClienteModal from "./EditClienteModal";
 
@@ -36,7 +36,7 @@ const DatiClienteTab: FC = () => {
   }
 
   if (errorCliente || !cliente) {
-    return <p className="error-text">Impossibile mostrare i dati cliente.</p>;
+    return <ErrorState message="Impossibile mostrare i dati cliente." />;
   }
 
   const handleSave = async (payload: UpdateClienteInput) => {
@@ -60,7 +60,9 @@ const DatiClienteTab: FC = () => {
 
   return (
     <>
-      {saveError && <p className="error-text detail-save-error">{saveError}</p>}
+      {saveError && (
+        <ErrorState message={saveError} className="detail-save-error" />
+      )}
 
       <dl className="detail-grid">
         <div className="detail-row-group">
